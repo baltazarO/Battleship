@@ -1,5 +1,7 @@
 package cs361.battleships.models;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
