@@ -6,26 +6,18 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BoardTest {
 
     @Test
     public void testInvalidPlacement() {
         Board board = new Board();
-        assertFalse(board.placeShip(new Ship("MINESWEEPER", true, new Square(1, 'A')), 11, 'C', true));
-    }
 
-    @Test
-    public void howIsMinesweeper() {
-        Ship hms = new Ship("MINESWEEPER", true, new Square(6, 'A'));
-        assertEquals(2, hms.getOccupiedSquares().size());
 
-        List<Square> spot = hms.getOccupiedSquares();
-        int topBoxRow = spot.get(0).getRow();
-        assertEquals(6, topBoxRow);
-
-        int botBoxRow = spot.get(1).getRow();
-        assertEquals(7, botBoxRow);
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"), 11, 'C', true));
+        board.placeShip(new Ship("MINESWEEPER"), 5, 'C', false);
+        assertTrue(board.placeShip(new Ship("DESTROYER"), 1, 'E', true));
     }
 
 }
