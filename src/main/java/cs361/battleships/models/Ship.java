@@ -22,6 +22,8 @@ public class Ship {
 	
 	public Ship(String kind, boolean isVertical, Square myPoint) {
 
+		occupiedSquares = new ArrayList<>();
+
 		if(myPoint.getColumn() < 'A' || myPoint.getColumn() > 'J'
 				|| myPoint.getRow() < 1 || myPoint.getRow() > 10){
 			throw new IllegalArgumentException("Your off the board");
@@ -52,9 +54,11 @@ public class Ship {
 				if(myPoint.getRow() > 8)
 					throw new IllegalArgumentException("Off board");
 
-				for(int i = 0; i < 3; i++) {
-					occupiedSquares.add(new Square(myRow + i, myPoint.getColumn()));
-				}
+				occupiedSquares.add(new Square(myRow, myPoint.getColumn()));
+				occupiedSquares.add(new Square(myRow + 1, myPoint.getColumn()));
+				occupiedSquares.add(new Square(myRow + 2, myPoint.getColumn()));
+
+
 			} else if(shipName.equals("BATTLESHIP")) {
 				if(myPoint.getRow() > 7)
 					throw new IllegalArgumentException("Off board");
@@ -105,8 +109,4 @@ public class Ship {
 		return occupiedSquares;
 	}
 
-	public boolean onBoard() {
-		//two cases: vertical and hor
-		return true;
-	}
 }
