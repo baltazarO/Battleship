@@ -5,11 +5,21 @@ import java.util.List;
 
 public class Board {
 
+	private Square [][] gameBoard;
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
 	 */
 	public Board() {
-		// TODO Implement
+		gameBoard = new Square[10][10];
+
+		for(int i = 0; i < 10; i++){
+			char col = 'A';
+			for(int j = 0; j < 10; j++){
+				gameBoard[i][j].setRow(i + 1);
+				gameBoard[i][j].setColumn(col);
+				col += 1;
+			}
+		}
 	}
 
 	/*
