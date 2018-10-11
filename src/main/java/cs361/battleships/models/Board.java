@@ -17,7 +17,7 @@ public class Board {
 			for(int j = 0; j < 10; j++){
 				gameBoard[i][j].setRow(i + 1);
 				gameBoard[i][j].setColumn(col);
-				col += 1;
+				col++;
 			}
 		}
 	}
