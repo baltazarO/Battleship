@@ -52,13 +52,16 @@ public class Game {
     }
 
     private char randCol() {
-        // TODO implement
+
         return (char)((Math.random()* 10) + 65);  //Adding 65 to turn to ascii
     }
 
     private int randRow() {
-        // TODO implement
+    
         int row = (int)((Math.random()* 10));
+	    
+	// Checking to ensure that no 0 row is returned    
+	    
         if (row == 0) {
             row++;  //adding 1 so zero is not a possible result
         }
@@ -70,6 +73,8 @@ public class Game {
 
         Random rand = new Random();
 
+	// Generating random number 0 or 1 to provide 50% chance of being vertical or not
+	    
         int chance = rand.nextInt(2);
 
         if(chance == 1)
