@@ -2,9 +2,18 @@ package cs361.battleships.models;
 
 public class Result {
 
+	AtackStatus occured;
+
+	public Result(){
+		occured = null;
+	}
+
+	public Result(AtackStatus occured){
+		this.occured = occured;
+	}
+
 	public AtackStatus getResult() {
-		//TODO implement
-		return null;
+		return occured;
 	}
 
 	public void setResult(AtackStatus result) {

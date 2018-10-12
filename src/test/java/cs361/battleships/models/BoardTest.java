@@ -4,9 +4,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class BoardTest {
 
@@ -16,8 +14,30 @@ public class BoardTest {
 
 
         assertFalse(board.placeShip(new Ship("MINESWEEPER"), 11, 'C', true));
-        board.placeShip(new Ship("MINESWEEPER"), 5, 'C', false);
-        assertTrue(board.placeShip(new Ship("DESTROYER"), 1, 'E', true));
     }
 
+    @Test
+    public void testValidPlacement() {
+        Board board = new Board();
+
+        assertTrue(board.placeShip(new Ship("MINESWEEPER"), 5, 'C', false));
+        assertTrue(board.placeShip(new Ship("DESTROYER"), 1, 'E', true));
+
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"), 5, 'B', false));
+
+        assertFalse(board.placeShip(new Ship("DESTROYER"), 2, 'E', true));
+
+    }
+
+    @Test
+    public void testAttack() {
+        Board board = new Board();
+        board.placeShip(new Ship("DESTROYER"), 1, 'E', true);
+        Result shouldHit = board.attack(1, 'E');
+        Result notHit = board.attack(1, 'A');
+        assertEquals(new Result(AtackStatus.HIT).getResult(), shouldHit.getResult());
+        assertNotEquals(new Result(AtackStatus.HIT).getResult(), notHit.getResult());
+
+        assertEquals(new Result(AtackStatus.INVALID).getResult(), board.attack(11, 'K').getResult());
+    }
 }
