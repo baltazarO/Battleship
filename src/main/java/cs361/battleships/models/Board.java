@@ -97,7 +97,19 @@ public class Board {
 	DO NOT change the signature of this method. It is used by the grading scripts.
 	 */
 	public Result attack(int x, char y) {
-		//TODO Implement
+		char attackVal = gameBoard[x - 1][y - 65];
+
+		if (attackVal == '#'){
+			gameBoard[x][y] = 'm';
+		}
+
+		if (attackVal == 's'){
+			gameBoard[x][y] = 'h';
+		}
+
+		else {
+			return false;
+		}
 		return null;
 	}
 
