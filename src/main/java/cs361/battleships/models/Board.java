@@ -146,11 +146,30 @@ public class Board {
             attacks.add(new Result(AtackStatus.HIT));
 
             //check sides
-            if(!(gameBoard[x-2][y-65] == 's' || gameBoard[x][y-65] == 's' || gameBoard[x-1][y-64] == 's' || gameBoard[x-1][y-66] == 's')){
-                attacks.add(new Result(AtackStatus.SUNK));
-
-                //IMPLEMENT
-            }
+			boolean alive = false;
+			if(x > 1){ //check above
+				if(gameBoard[x-2][y-65] == 's'){
+					alive = true;
+				}
+			}
+			if(x < 10){ //check below
+				if(gameBoard[x][y-65] == 's'){
+					alive = true;
+				}
+			}
+			if(y-65 > 0){ //check left
+				if(gameBoard[x-1][y-66] == 's'){
+					alive = true;
+				}
+			}
+			if(y-65 < 9){ //check right
+				if(gameBoard[x-1][y-64] == 's'){
+					alive = true;
+				}
+			}
+			if(!alive) {
+				attacks.add(new Result(AtackStatus.SUNK));
+			}
             return new Result(AtackStatus.HIT);
         } else if (spotChar == 'm') {
 		    attacks.add(new Result(AtackStatus.MISS));
