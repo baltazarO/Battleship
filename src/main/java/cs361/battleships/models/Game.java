@@ -1,9 +1,11 @@
 package cs361.battleships.models;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static cs361.battleships.models.AtackStatus.*;
 
@@ -51,16 +53,32 @@ public class Game {
 
     private char randCol() {
         // TODO implement
-        return 'X';
+        return (char)((Math.random()* 10) + 65);  //Adding 65 to turn to ascii
     }
 
     private int randRow() {
         // TODO implement
-        return 0;
+        int row = (int)((Math.random()* 10));
+        if (row == 0) {
+            row++;  //adding 1 so zero is not a possible result
+        }
+        return row;
     }
 
     private boolean randVertical() {
         // TODO implement
-        return false;
+
+        Random rand = new Random();
+
+        int chance = rand.nextInt(2);
+
+        if(chance == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
