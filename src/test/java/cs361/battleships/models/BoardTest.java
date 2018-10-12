@@ -35,7 +35,15 @@ public class BoardTest {
         board.placeShip(new Ship("DESTROYER"), 1, 'E', true);
         Result shouldHit = board.attack(1, 'E');
         Result notHit = board.attack(1, 'A');
+        board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true);
+        Result hitLeft = board.attack(1,'A');
+        board.placeShip(new Ship("BATTLESHIP"), 7, 'J', true);
+        Result hitRight = board.attack(7,'J');
+        Result hitBottom = board.attack(10,'J');
         assertEquals(new Result(AtackStatus.HIT).getResult(), shouldHit.getResult());
+        assertEquals(new Result(AtackStatus.HIT).getResult(), hitLeft.getResult());
+        assertEquals(new Result(AtackStatus.HIT).getResult(), hitRight.getResult());
+        assertEquals(new Result(AtackStatus.HIT).getResult(), hitBottom.getResult());
         assertNotEquals(new Result(AtackStatus.HIT).getResult(), notHit.getResult());
 
         assertEquals(new Result(AtackStatus.INVALID).getResult(), board.attack(11, 'K').getResult());
