@@ -2,7 +2,9 @@ package cs361.battleships.models;
 
 public class Result {
 
-	AtackStatus occured;
+	private AtackStatus occured;
+	private Ship myShip;
+	private Square myLocation;
 
 	public Result(){
 		occured = null;
@@ -17,7 +19,7 @@ public class Result {
 	}
 
 	public void setResult(AtackStatus result) {
-		//TODO implement
+		occured = result;
 	}
 
 	public Ship getShip() {

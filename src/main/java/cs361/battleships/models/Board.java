@@ -7,12 +7,14 @@ public class Board {
 
 	private char [][] gameBoard;
 	private List<Ship> fleet;
+	private List<Result> attacks;
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
 	 */
 	public Board() {
 		gameBoard = new char[10][10];
 		fleet = new ArrayList<>();
+		attacks = new ArrayList<>();
 
 		for(int i = 0; i < 10; i++){
 			char col = 'A';
@@ -125,38 +127,39 @@ public class Board {
 	public Result attack(int x, char y) {
 
 
-	    if(x > 10 || x < 1 || y < 'A' || y > 'J')
-	        return new Result(AtackStatus.INVALID);
+	    if(x > 10 || x < 1 || y < 'A' || y > 'J') {
+	        attacks.add(new Result(AtackStatus.INVALID));
+            return new Result(AtackStatus.INVALID);
+        }
 
 
 		char spotChar = gameBoard[x-1][y-65];
 		if(spotChar == '#'){
 		    gameBoard[x-1][y-65] = 'm';
 
+
             Result hap = new Result(AtackStatus.MISS);
+            attacks.add(hap);
             return hap;
         } else if(spotChar == 's') {
             gameBoard[x-1][y-65] = 'h';
+            attacks.add(new Result(AtackStatus.HIT));
 
-		    return new Result(AtackStatus.HIT);
-        } else
-		    return new Result(AtackStatus.INVALID);
+            //check sides
+            if(!(gameBoard[x-2][y-65] == 's' || gameBoard[x][y-65] == 's' || gameBoard[x-1][y-64] == 's' || gameBoard[x-1][y-66] == 's')){
+                attacks.add(new Result(AtackStatus.SUNK));
 
-		char attackVal = gameBoard[x - 1][y - 65];
-
-		if (attackVal == '#'){
-			gameBoard[x][y] = 'm';
-		}
-
-		if (attackVal == 's'){
-			gameBoard[x][y] = 'h';
-		}
-
-		else {
-			return false;
-		}
-		return null;
-
+                //IMPLEMENT
+            }
+            return new Result(AtackStatus.HIT);
+        } else if (spotChar == 'm') {
+		    attacks.add(new Result(AtackStatus.MISS));
+            return new Result(AtackStatus.MISS);
+        } else if (spotChar == 'h') {
+            attacks.add(new Result(AtackStatus.HIT));
+            return new Result(AtackStatus.HIT);
+        }
+        return new Result(AtackStatus.INVALID);
 	}
 
 	public List<Ship> getShips() {
@@ -166,7 +169,7 @@ public class Board {
 	public void setShips(List<Ship> ships) {
 	    for(int k = 0; k < ships.size(); k++) {
             boolean isVertical = true;
-            Ship s1 = ships.get(0);
+            Ship s1 = ships.get(k);
             int r1 = s1.getOccupiedSquares().get(0).getRow();
             char c1 = s1.getOccupiedSquares().get(0).getColumn();
 
@@ -184,12 +187,12 @@ public class Board {
 
 	}
 
-	public List<Result> getAttacks() {
-		//TODO implement
-		return null;
-	}
+	public List<Result> getAttacks() { return attacks; }
 
 	public void setAttacks(List<Result> attacks) {
-		//TODO implement
+		for(int i = 0; i < attacks.size(); i++){
+		    this.attacks.add(attacks.get(i));
+
+        }
 	}
 }
