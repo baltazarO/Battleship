@@ -20,7 +20,7 @@ public class Board {
 				gameBoard[i][j] = '#';
 			}
 		}
-	}
+  }
 
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
@@ -124,6 +124,7 @@ public class Board {
 	 */
 	public Result attack(int x, char y) {
 
+
 	    if(x > 10 || x < 1 || y < 'A' || y > 'J')
 	        return new Result(AtackStatus.INVALID);
 
@@ -140,6 +141,22 @@ public class Board {
 		    return new Result(AtackStatus.HIT);
         } else
 		    return new Result(AtackStatus.INVALID);
+
+		char attackVal = gameBoard[x - 1][y - 65];
+
+		if (attackVal == '#'){
+			gameBoard[x][y] = 'm';
+		}
+
+		if (attackVal == 's'){
+			gameBoard[x][y] = 'h';
+		}
+
+		else {
+			return false;
+		}
+		return null;
+
 	}
 
 	public List<Ship> getShips() {

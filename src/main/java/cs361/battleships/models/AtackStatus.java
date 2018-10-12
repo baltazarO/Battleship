@@ -6,7 +6,6 @@ public enum AtackStatus {
 	 * The result if an attack results in a miss.
 	 */
 	MISS,
-
 	/**
 	 * The result if an attack results in a hit on an enemy ship.
 	 */
