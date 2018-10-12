@@ -23,20 +23,18 @@ public class Result {
 	}
 
 	public Ship getShip() {
-		//TODO implement
-		return null;
+		return myShip;
 	}
 
 	public void setShip(Ship ship) {
-		//TODO implement
+		myShip = ship;
 	}
 
 	public Square getLocation() {
-		//TODO implement
-		return null;
+		return myLocation;
 	}
 
 	public void setLocation(Square square) {
-		//TODO implement
+		myLocation = square;
 	}
 }
