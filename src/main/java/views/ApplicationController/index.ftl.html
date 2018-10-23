@@ -1,19 +1,37 @@
 <#import "../layout/defaultLayout.ftl.html" as layout> 
-<@layout.myLayout "Home page">    
+<@layout.myLayout "Home page">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div id="Boards">
+    <div id="leftBoard">
+        <table id="opponent" class="battleGrid">
+        </table>
+    </div>
 
+    <div id="rightBoard">
+        <table id="player" class="battleGrid">
+        </table>
+    </div>
 
-<h1>The Battleship game</h1>
+    <div id="center">
+        <ul>
+            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+            alt="minesweeper" width="30" height="30"></li>
+            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+                     alt="Destroyer" width="30" height="30"></li>
+            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+                     alt="Battleship" width="30" height="30"></li>
+        </ul>
+    </div>
 
-<table id="opponent" class="battleGrid">
-</table>
+    <div id="info_center"> <p>this is where results will popup </p></div>
+</div>
 
-<table id="player" class="battleGrid">
-</table>
 
 <ul>
     <li><button id="place_minesweeper">Place Minesweeper</button></li>
     <li><button id="place_destroyer">Place Destroyer</button></li>
     <li><button id="place_battleship">Place Battleship</button></li>
+    <li><button id="reset_button">Reset</button></li>
     <li><input type="checkbox" id="is_vertical">Vertical</input></li>
 </ul>
 

@@ -2,7 +2,7 @@
 -------------------------------------------------- */
 
 .battleGrid {
-    border: 1px solid black;
+    border: 1px solid blue;
     border-spacing: 0px;
 }
 
@@ -38,4 +38,53 @@ td:hover {
 
 .miss {
     background-color: blue;
+}
+
+footer {
+    background-color: lightblue;
+    text-align: center;
+    height: 40px;
+    font-family: verdana;
+    font-size: 20px;
+}
+
+header {
+    background-color: grey;
+    text-align: right;
+    line-height: 0px;
+    height: 80px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    outline: none;
+}
+
+#board{
+ display: flex;
+  flex-direction: column-reverse;
+    width: 95%;
+}
+
+h1 {
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+#rightBoard{
+    position: absolute;
+    top: 88px;
+    right: 0px;
+}
+
+#center{
+    position: relative;
+    top: -190px;
+    left: 350px;
+}
+
+#info_center
+{
+    text-align: center;
 }
