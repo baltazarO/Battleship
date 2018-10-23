@@ -1,7 +1,7 @@
 <#import "../layout/defaultLayout.ftl.html" as layout> 
 <@layout.myLayout "Home page">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<div id="Boards">
+<div class="flex-box">
     <div id="leftBoard">
         <table id="opponent" class="battleGrid">
         </table>
@@ -11,21 +11,20 @@
         <table id="player" class="battleGrid">
         </table>
     </div>
-
-    <div id="center">
-        <ul>
-            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
-            alt="minesweeper" width="30" height="30"></li>
-            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
-                     alt="Destroyer" width="30" height="30"></li>
-            <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
-                     alt="Battleship" width="30" height="30"></li>
-        </ul>
-    </div>
-
-    <div id="info_center"> <p>this is where results will popup </p></div>
 </div>
 
+<div id="center">
+    <ul>
+        <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+                 alt="minesweeper" width="30" height="30"></li>
+        <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+                 alt="Destroyer" width="30" height="30"></li>
+        <li><img src="https://www.sailboston.com/wp-content/uploads/2016/11/amerigo-vespucci.jpg"
+                 alt="Battleship" width="30" height="30"></li>
+    </ul>
+</div>
+
+<div id="info_center"> <p>this is where results will popup </p></div>
 
 <ul>
     <li><button id="place_minesweeper">Place Minesweeper</button></li>
