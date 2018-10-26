@@ -3,6 +3,16 @@ var placedShips = 0;
 var game;
 var shipType;
 var vertical;
+document.getElementById("reset_button").addEventListener("click", resetPage);
+document.getElementById("help").addEventListener("click", help);
+
+function resetPage(){
+    location.reload();
+}
+
+function help(){
+    alert("How to play the game:\n 1. Place all 3 ships on your board\n 2. Click enemy board to attack\n 3. Game ends when all ships for 1 player are sunk\n\n Have fun!");
+}
 
 function makeGrid(table, isPlayer) {
     let row1 = document.createElement('tr');
@@ -93,6 +103,7 @@ function cellClick() {
     let row = this.parentNode.rowIndex + 1;
     let col = String.fromCharCode(this.cellIndex + 65);
     if (isSetup) {
+        Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical}, function(data) {
             game = data;
             redrawGrid();
@@ -154,15 +165,18 @@ function place(size) {
 function initGame() {
     makeGrid(document.getElementById("opponent"), false);
     makeGrid(document.getElementById("player"), true);
-    document.getElementById("place_minesweeper").addEventListener("click", function(e) {
+    document.getElementById("minesweeper").addEventListener("click", function(e) {
+        this.classList.add("selected");
         shipType = "MINESWEEPER";
        registerCellListener(place(2));
     });
-    document.getElementById("place_destroyer").addEventListener("click", function(e) {
+    document.getElementById("destroyer").addEventListener("click", function(e) {
+        this.classList.add("selected");
         shipType = "DESTROYER";
        registerCellListener(place(3));
     });
-    document.getElementById("place_battleship").addEventListener("click", function(e) {
+    document.getElementById("battleship").addEventListener("click", function(e) {
+        this.classList.add("selected");
         shipType = "BATTLESHIP";
        registerCellListener(place(4));
     });

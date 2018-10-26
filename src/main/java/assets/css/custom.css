@@ -26,11 +26,11 @@
 }
 
 #player {
-    border: 1px solid green;
+    border: 3px solid green;
 }
 
 #opponent {
-    border: 1px solid red;
+    border: 3px solid red;
 }
 
 td:hover {
@@ -104,6 +104,10 @@ h1 {
     justify-content: space-between;
 }
 
+img {
+    cursor: grab;
+}
+
 #center{
     .ls text-align: center;
     position: relative;
@@ -127,12 +131,17 @@ h1 {
 
 #rightBoard{
    padding-top: 0%;
-   padding-right: 0%;
+   padding-right: 5%;
    padding-bottom: 0%;
    padding-left: 0%;
 
    margin: 0;
 }
+
+#leftBoard{
+    padding-left: 5%;
+}
+
 #boxy{
     text-align: center;
 }
@@ -142,11 +151,27 @@ h1 {
     right: 10px;
 }
 
-#key {
+.key {
     position: relative;
     right: 10px;
 }
 
+#miss{
+    color: blue;
+}
+
+#hit {
+    color: orange;
+}
+
+#sunk {
+    color: red;
+}
+
 #ships {
     padding-left: 40%;
+}
+
+.selected {
+    filter: grayscale(100%);
 }
