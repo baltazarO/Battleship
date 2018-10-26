@@ -5,8 +5,25 @@ var shipType;
 var vertical;
 
 function makeGrid(table, isPlayer) {
+    let row1 = document.createElement('tr');
+    for (i=0; i<11; i++){
+         var itoa = String.fromCharCode(i+64);
+         let letters = document.createElement("P");
+         letters.setAttribute("class", "letters");
+         var t1 = document.createTextNode(itoa);
+         letters.appendChild(t1);
+         row1.appendChild(letters);
+    }
+    table.appendChild(row1);
+
     for (i=0; i<10; i++) {
         let row = document.createElement('tr');
+
+         let numbers = document.createElement("P");
+         numbers.setAttribute("class", "letters");
+         var t = document.createTextNode(i+1);
+         numbers.appendChild(t);
+         row.appendChild(numbers);
         for (j=0; j<10; j++) {
             let column = document.createElement('td');
             column.addEventListener("click", cellClick);
@@ -150,3 +167,11 @@ function initGame() {
         game = data;
     });
 };
+
+window.onkeyup = function(e) {
+    var key = e.keycode ? e.keycode : e.which;
+
+    if(key == 82){
+        vertical = !vertical;
+    }
+}
