@@ -146,7 +146,6 @@ function place(size) {
     return function() {
         let row = this.parentNode.rowIndex;
         let col = this.cellIndex;
-        console.log("place", row, col);
         if (document.getElementById("is_vertical").checked){
             vertical = document.getElementById("is_vertical").checked;
         }
@@ -212,7 +211,6 @@ window.onkeyup = function(e) {
         let row = globalRow;
         let col = globalCol;
         let size = globalSize;
-        console.log("place", row, col);
         if (document.getElementById("is_vertical").checked){
             vertical = document.getElementById("is_vertical").checked;
         }
