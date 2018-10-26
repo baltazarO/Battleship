@@ -14,7 +14,7 @@ function makeGrid(table, isPlayer) {
          letters.appendChild(t1);
          row1.appendChild(letters);
     }
-    table.appendChild(row1);
+    table.parentNode.insertBefore(row1,table.parentNode.firstChild);
 
     for (i=0; i<10; i++) {
         let row = document.createElement('tr');
@@ -45,19 +45,22 @@ function markHits(board, elementId, surrenderText) {
             document.getElementsByName('outputBox')[0].value= "COMPUTER HIT YOU";
             }
         else if (attack.result === "SUNK"){
-            className = "hit"
+            className = "sink"
             }
         else if (attack.result === "SURRENDER"){
             document.getElementsByName('outputBox')[0].value= surrenderText;
             alert(surrenderText);
             }
         document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
+
     });
 }
 
 function redrawGrid() {
     Array.from(document.getElementById("opponent").childNodes).forEach((row) => row.remove());
     Array.from(document.getElementById("player").childNodes).forEach((row) => row.remove());
+    document.getElementById("leftBoard").firstChild.remove();
+    document.getElementById("rightBoard").firstChild.remove();
     makeGrid(document.getElementById("opponent"), false);
     makeGrid(document.getElementById("player"), true);
     if (game === undefined) {
@@ -125,7 +128,7 @@ function place(size) {
     return function() {
         let row = this.parentNode.rowIndex;
         let col = this.cellIndex;
-        vertical = document.getElementById("is_vertical").checked;
+        //vertical = document.getElementById("is_vertical").checked;
         let table = document.getElementById("player");
         for (let i=0; i<size; i++) {
             let cell;
