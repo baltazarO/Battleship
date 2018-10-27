@@ -47,26 +47,35 @@ function makeGrid(table, isPlayer) {
 }
 
 function markHits(board, elementId, surrenderText) {
+    var attacker;
+    if(elementId == "player"){
+        attacker = "computer";
+    }
+    else if(elementId == "opponent"){
+        attacker ="player";
+    }
+    let className;
+    document.getElementById("outputBox").classList.remove("errorText");
     board.attacks.forEach((attack) => {
-        let className;
+        //let className;
         if (attack.result === "MISS"){
             className = "miss";
-            document.getElementsByName('outputBox')[0].value= "COMPUTER MISSED YOUR SHIP";
             }
         else if (attack.result === "HIT"){
             className = "hit";
-            document.getElementsByName('outputBox')[0].value= "COMPUTER HIT YOU";
             }
         else if (attack.result === "SUNK"){
             className = "sink"
             }
         else if (attack.result === "SURRENDER"){
-            document.getElementsByName('outputBox')[0].value= surrenderText;
             alert(surrenderText);
             }
         document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
-
     });
+    if(!isSetup){
+        document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\n" + attacker + " " + className +"!";
+        document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
+    }
 }
 
 function redrawGrid() {
@@ -106,11 +115,12 @@ function cellClick() {
     let row = this.parentNode.rowIndex + 1;
     let col = String.fromCharCode(this.cellIndex + 65);
     if (isSetup) {
-        Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical}, function(data) {
+            Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
             game = data;
             redrawGrid();
-            document.getElementsByName('outputBox')[0].value= 'You placed ' + shipType;
+            document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\nYou placed " + shipType;
+            document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
             placedShips++;
             if (placedShips == 3) {
                 isSetup = false;
@@ -129,7 +139,9 @@ function sendXhr(method, url, data, handler) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", function(event) {
         if (req.status != 200) {
-            alert("Cannot complete the action");
+            document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\nERROR CAN NOT COMPLETE THAT ACTION!";
+            document.getElementById("outputBox").classList.add("errorText");
+            document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
             return;
         }
         handler(JSON.parse(req.responseText));

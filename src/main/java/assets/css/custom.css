@@ -5,9 +5,10 @@
     height: 30px;
     margin: 0;
     padding: 0;
-    width: 34px;
+    width: 35px;
     display: table-cell;
     text-align: center;
+    vertical-align: middle;
 }
 
 .battleGrid {
@@ -173,5 +174,9 @@ img {
 }
 
 .selected {
-    filter: grayscale(100%);
+    filter: contrast(0); //much easier to see than grayscale(100)
+}
+
+.errorText {
+    color: red;
 }
