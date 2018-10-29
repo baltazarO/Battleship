@@ -20,31 +20,25 @@ function help(){
 }
 
 function resize(){
-    var opCells = document.getElementsByClassName("opCell");
-    var playerCells = document.getElementsByClassName("playerCell");
     if(this.classList.contains("opponent")){
-        resizeLoop(opCells, this);
+        var table = document.getElementById("opponent");
+        var row1 = document.getElementById("row1opponent");
     }
     if(this.classList.contains("player")){
-        resizeLoop(playerCells, this);
+        var table = document.getElementById("player");
+        var row1 = document.getElementById("row1player");
     }
-}
-
-function resizeLoop(cells, button){
-    for (var i = 0, max = cells.length; i < max; i++) {
-         var currWidth = parseInt(cells[i].style.width);
-         if(!currWidth){
-            currWidth = 30;
-         }
-         if(button.classList.contains("increaseSize")){
-            var newWidth = currWidth + 10 + "px";
-         }
-         if(button.classList.contains("decreaseSize")){
-            var newWidth = currWidth - 10 + "px";
-         }
-         cells[i].style.width = newWidth;
-         cells[i].style.height = newWidth;
+    var currWidth = table.offsetWidth;
+    if(this.classList.contains("increaseSize")){
+        var newWidth = currWidth + 110 + "px";
+        var newHeight = currWidth + 66 + "px";
+    } else {
+        var newWidth = currWidth - 110 + "px";
+        var newHeight = currWidth - 144 + "px";
     }
+    table.style.width = newWidth;
+    table.style.height = newHeight;
+    row1.style.width = newWidth;
 }
 
 function makeGrid(table, isPlayer) {
@@ -56,38 +50,26 @@ function makeGrid(table, isPlayer) {
          }
          let letters = document.createElement("P");
          letters.classList.add("letters");
-         if(isPlayer){
-            letters.classList.add("playerCell");
-         } else{
-            letters.classList.add("opCell");
-         }
          var t1 = document.createTextNode(itoa);
          letters.appendChild(t1);
          row1.appendChild(letters);
     }
-    table.parentNode.insertBefore(row1,table.parentNode.firstChild);
+    if(isPlayer){
+        document.getElementById("row1opponent").appendChild(row1);
+    } else {
+        document.getElementById("row1player").appendChild(row1);
+    }
 
     for (i=0; i<10; i++) {
         let row = document.createElement('tr');
 
          let numbers = document.createElement("P");
-         numbers.classList.add("letters");
-         if(isPlayer){
-            numbers.classList.add("playerCell");
-         }
-         else {
-            numbers.classList.add("opCell");
-         }
+         numbers.classList.add("numbers");
          var t = document.createTextNode(i+1);
          numbers.appendChild(t);
          row.appendChild(numbers);
         for (j=0; j<10; j++) {
             let column = document.createElement('td');
-            if(isPlayer){
-                column.classList.add("playerCell");
-            } else{
-                column.classList.add("opCell");
-            }
             column.addEventListener("click", cellClick);
             row.appendChild(column);
         }
@@ -130,8 +112,8 @@ function markHits(board, elementId, surrenderText) {
 function redrawGrid() {
     Array.from(document.getElementById("opponent").childNodes).forEach((row) => row.remove());
     Array.from(document.getElementById("player").childNodes).forEach((row) => row.remove());
-    document.getElementById("leftBoard").firstChild.remove();
-    document.getElementById("rightBoard").firstChild.remove();
+    document.getElementById("row1opponent").firstChild.remove();
+    document.getElementById("row1player").firstChild.remove();
     makeGrid(document.getElementById("opponent"), false);
     makeGrid(document.getElementById("player"), true);
     if (game === undefined) {
