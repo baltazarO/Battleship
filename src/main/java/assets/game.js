@@ -5,6 +5,8 @@ var shipType;
 var vertical;
 document.getElementById("reset_button").addEventListener("click", resetPage);
 document.getElementById("help").addEventListener("click", help);
+Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
+Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 
 function resetPage(){
     var result = confirm("Reload the game?");
@@ -17,12 +19,48 @@ function help(){
     alert("How to play the game:\n 1. Place all 3 ships on your board\n 2. Click enemy board to attack\n 3. Game ends when all ships for 1 player are sunk\n\n Have fun!");
 }
 
+function resize(){
+    var opCells = document.getElementsByClassName("opCell");
+    var playerCells = document.getElementsByClassName("playerCell");
+    if(this.classList.contains("opponent")){
+        resizeLoop(opCells, this);
+    }
+    if(this.classList.contains("player")){
+        resizeLoop(playerCells, this);
+    }
+}
+
+function resizeLoop(cells, button){
+    for (var i = 0, max = cells.length; i < max; i++) {
+         var currWidth = parseInt(cells[i].style.width);
+         if(!currWidth){
+            currWidth = 30;
+         }
+         if(button.classList.contains("increaseSize")){
+            var newWidth = currWidth + 10 + "px";
+         }
+         if(button.classList.contains("decreaseSize")){
+            var newWidth = currWidth - 10 + "px";
+         }
+         cells[i].style.width = newWidth;
+         cells[i].style.height = newWidth;
+    }
+}
+
 function makeGrid(table, isPlayer) {
     let row1 = document.createElement('tr');
     for (i=0; i<11; i++){
          var itoa = String.fromCharCode(i+64);
+         if(i == 0){
+            itoa = String.fromCharCode(32);
+         }
          let letters = document.createElement("P");
-         letters.setAttribute("class", "letters");
+         letters.classList.add("letters");
+         if(isPlayer){
+            letters.classList.add("playerCell");
+         } else{
+            letters.classList.add("opCell");
+         }
          var t1 = document.createTextNode(itoa);
          letters.appendChild(t1);
          row1.appendChild(letters);
@@ -33,12 +71,23 @@ function makeGrid(table, isPlayer) {
         let row = document.createElement('tr');
 
          let numbers = document.createElement("P");
-         numbers.setAttribute("class", "letters");
+         numbers.classList.add("letters");
+         if(isPlayer){
+            numbers.classList.add("playerCell");
+         }
+         else {
+            numbers.classList.add("opCell");
+         }
          var t = document.createTextNode(i+1);
          numbers.appendChild(t);
          row.appendChild(numbers);
         for (j=0; j<10; j++) {
             let column = document.createElement('td');
+            if(isPlayer){
+                column.classList.add("playerCell");
+            } else{
+                column.classList.add("opCell");
+            }
             column.addEventListener("click", cellClick);
             row.appendChild(column);
         }
@@ -139,7 +188,11 @@ function sendXhr(method, url, data, handler) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", function(event) {
         if (req.status != 200) {
-            document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\nERROR CAN NOT COMPLETE THAT ACTION!";
+            if(isSetup){
+                document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT PLACE SHIP!";
+            } else {
+                document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT COMPLETE THAT ATTACK!";
+            }
             document.getElementById("outputBox").classList.add("errorText");
             document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
             return;
@@ -158,9 +211,7 @@ function place(size) {
     return function() {
         let row = this.parentNode.rowIndex;
         let col = this.cellIndex;
-        if (document.getElementById("is_vertical").checked){
-            vertical = document.getElementById("is_vertical").checked;
-        }
+        vertical = document.getElementById("is_vertical").checked;
         let table = document.getElementById("player");
         for (let i=0; i<size; i++) {
             let cell;
@@ -216,16 +267,15 @@ window.onkeyup = function(e) {
     var key = e.keycode ? e.keycode : e.which;
 
     if(key == 82){
-        vertical = !vertical;
+        document.getElementById("is_vertical").checked = !(document.getElementById("is_vertical").checked);
+
         Array.from(document.getElementsByClassName("placed")).forEach((ship) => ship.classList.remove("placed"));
 
         //copied from place above
         let row = globalRow;
         let col = globalCol;
         let size = globalSize;
-        if (document.getElementById("is_vertical").checked){
-            vertical = document.getElementById("is_vertical").checked;
-        }
+        vertical = document.getElementById("is_vertical").checked;
         let table = document.getElementById("player");
         for (let i=0; i<size; i++) {
             let cell;
