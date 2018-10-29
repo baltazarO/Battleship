@@ -4,7 +4,7 @@
 .letters {
     height: 30px;
     margin: 0;
-    padding: 2px;
+    padding: 1px;
     width: 30px;
     display: table-cell;
     text-align: center;
@@ -14,7 +14,7 @@
 .numbers {
     height: 30px;
     margin: 0;
-    padding: 2px;
+    padding: 1px;
     width: 30px;
     display: table-cell;
     text-align: center;
