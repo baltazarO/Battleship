@@ -3,31 +3,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="flex-box">
     <div id="leftBoard">
+        <table id="row1opponent"></table>
         <table id="opponent" class="battleGrid">
         </table>
-        <form action="/">
+        <form action="javascript:void(0);">
             Pick name: <input type="text" name="FirstName" value="Enemy"><br>
         </form>
+        <button class="increaseSize opponent">+</button>
+        <button class="decreaseSize opponent">-</button>
     </div>
     <div id="center">
+        <p id="centerP">Select Ships Below to Start Playing!</p>
         <ul id="ships">
             <li><img id="minesweeper" class="ship" src="../../assets/minesweeper.png" alt="minesweeper"></li>
             <li><img id="destroyer" class="ship" src="../../assets/destroyer.png" alt="Destroyer"></li>
             <li><img id="battleship" class="ship" src="../../assets/battleship.png" alt="Battleship"></li>
-            <li><input type="checkbox" id="is_vertical">Vertical, try pressing 'r' for easier rotating!</input></li>
+            <li><input type="checkbox" id="is_vertical">Vertical, Press 'r' for easier rotating!</input></li>
         </ul>
         <div id="boxy">
             <ul><h2>Results</h2></ul>
-            <ul><textarea rows="4" cols="30" name="outputBox">This is where results go!</textarea></ul>
+            <ul><textarea id="outputBox" rows="4" cols="30" name="outputBox">This is where results go!</textarea></ul>
         </div>
     </div>
     <div id="rightBoard">
+        <table id="row1player"></table>
         <table id="player" class="battleGrid">
         </table>
-        <form action="">
+        <form action="javascript:void(0);">
             Pick name: <input type="text" name="FirstName" value="Player"><br>
         </form>
-
+        <button class="increaseSize player">+</button>
+        <button class="decreaseSize player">-</button>
     </div>
 </div>
 

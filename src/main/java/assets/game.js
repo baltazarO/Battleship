@@ -5,6 +5,8 @@ var shipType;
 var vertical;
 document.getElementById("reset_button").addEventListener("click", resetPage);
 document.getElementById("help").addEventListener("click", help);
+Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
+Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 
 function resetPage(){
     var result = confirm("Reload the game?");
@@ -17,23 +19,52 @@ function help(){
     alert("How to play the game:\n 1. Place all 3 ships on your board\n 2. Click enemy board to attack\n 3. Game ends when all ships for 1 player are sunk\n\n Have fun!");
 }
 
+function resize(){
+    if(this.classList.contains("opponent")){
+        var table = document.getElementById("opponent");
+        var row1 = document.getElementById("row1opponent");
+    }
+    if(this.classList.contains("player")){
+        var table = document.getElementById("player");
+        var row1 = document.getElementById("row1player");
+    }
+    var currWidth = table.offsetWidth;
+    if(this.classList.contains("increaseSize")){
+        var newWidth = currWidth + 110 + "px";
+        var newHeight = currWidth + 66 + "px";
+    } else {
+        var newWidth = currWidth - 110 + "px";
+        var newHeight = currWidth - 144 + "px";
+    }
+    table.style.width = newWidth;
+    table.style.height = newHeight;
+    row1.style.width = newWidth;
+}
+
 function makeGrid(table, isPlayer) {
     let row1 = document.createElement('tr');
     for (i=0; i<11; i++){
          var itoa = String.fromCharCode(i+64);
+         if(i == 0){
+            itoa = String.fromCharCode(32);
+         }
          let letters = document.createElement("P");
-         letters.setAttribute("class", "letters");
+         letters.classList.add("letters");
          var t1 = document.createTextNode(itoa);
          letters.appendChild(t1);
          row1.appendChild(letters);
     }
-    table.parentNode.insertBefore(row1,table.parentNode.firstChild);
+    if(isPlayer){
+        document.getElementById("row1opponent").appendChild(row1);
+    } else {
+        document.getElementById("row1player").appendChild(row1);
+    }
 
     for (i=0; i<10; i++) {
         let row = document.createElement('tr');
 
          let numbers = document.createElement("P");
-         numbers.setAttribute("class", "letters");
+         numbers.classList.add("numbers");
          var t = document.createTextNode(i+1);
          numbers.appendChild(t);
          row.appendChild(numbers);
@@ -47,33 +78,42 @@ function makeGrid(table, isPlayer) {
 }
 
 function markHits(board, elementId, surrenderText) {
+    var attacker;
+    if(elementId == "player"){
+        attacker = "computer";
+    }
+    else if(elementId == "opponent"){
+        attacker ="player";
+    }
+    let className;
+    document.getElementById("outputBox").classList.remove("errorText");
     board.attacks.forEach((attack) => {
-        let className;
+        //let className;
         if (attack.result === "MISS"){
             className = "miss";
-            document.getElementsByName('outputBox')[0].value= "COMPUTER MISSED YOUR SHIP";
             }
         else if (attack.result === "HIT"){
             className = "hit";
-            document.getElementsByName('outputBox')[0].value= "COMPUTER HIT YOU";
             }
         else if (attack.result === "SUNK"){
             className = "sink"
             }
         else if (attack.result === "SURRENDER"){
-            document.getElementsByName('outputBox')[0].value= surrenderText;
             alert(surrenderText);
             }
         document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
-
     });
+    if(!isSetup){
+        document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\n" + attacker + " " + className +"!";
+        document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
+    }
 }
 
 function redrawGrid() {
     Array.from(document.getElementById("opponent").childNodes).forEach((row) => row.remove());
     Array.from(document.getElementById("player").childNodes).forEach((row) => row.remove());
-    document.getElementById("leftBoard").firstChild.remove();
-    document.getElementById("rightBoard").firstChild.remove();
+    document.getElementById("row1opponent").firstChild.remove();
+    document.getElementById("row1player").firstChild.remove();
     makeGrid(document.getElementById("opponent"), false);
     makeGrid(document.getElementById("player"), true);
     if (game === undefined) {
@@ -106,11 +146,12 @@ function cellClick() {
     let row = this.parentNode.rowIndex + 1;
     let col = String.fromCharCode(this.cellIndex + 65);
     if (isSetup) {
-        Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical}, function(data) {
+            Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
             game = data;
             redrawGrid();
-            document.getElementsByName('outputBox')[0].value= 'You placed ' + shipType;
+            document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\nYou placed " + shipType;
+            document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
             placedShips++;
             if (placedShips == 3) {
                 isSetup = false;
@@ -129,7 +170,13 @@ function sendXhr(method, url, data, handler) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", function(event) {
         if (req.status != 200) {
-            alert("Cannot complete the action");
+            if(isSetup){
+                document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT PLACE SHIP!";
+            } else {
+                document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT COMPLETE THAT ATTACK!";
+            }
+            document.getElementById("outputBox").classList.add("errorText");
+            document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
             return;
         }
         handler(JSON.parse(req.responseText));
@@ -146,9 +193,7 @@ function place(size) {
     return function() {
         let row = this.parentNode.rowIndex;
         let col = this.cellIndex;
-        if (document.getElementById("is_vertical").checked){
-            vertical = document.getElementById("is_vertical").checked;
-        }
+        vertical = document.getElementById("is_vertical").checked;
         let table = document.getElementById("player");
         for (let i=0; i<size; i++) {
             let cell;
@@ -204,16 +249,15 @@ window.onkeyup = function(e) {
     var key = e.keycode ? e.keycode : e.which;
 
     if(key == 82){
-        vertical = !vertical;
+        document.getElementById("is_vertical").checked = !(document.getElementById("is_vertical").checked);
+
         Array.from(document.getElementsByClassName("placed")).forEach((ship) => ship.classList.remove("placed"));
 
         //copied from place above
         let row = globalRow;
         let col = globalCol;
         let size = globalSize;
-        if (document.getElementById("is_vertical").checked){
-            vertical = document.getElementById("is_vertical").checked;
-        }
+        vertical = document.getElementById("is_vertical").checked;
         let table = document.getElementById("player");
         for (let i=0; i<size; i++) {
             let cell;

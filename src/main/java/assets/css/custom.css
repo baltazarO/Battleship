@@ -4,10 +4,21 @@
 .letters {
     height: 30px;
     margin: 0;
-    padding: 0;
-    width: 34px;
+    padding: 1px;
+    width: 30px;
     display: table-cell;
     text-align: center;
+    vertical-align: middle;
+}
+
+.numbers {
+    height: 30px;
+    margin: 0;
+    padding: 1px;
+    width: 30px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .battleGrid {
@@ -106,6 +117,8 @@ h1 {
 
 img {
     cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 #center{
@@ -113,15 +126,12 @@ img {
     position: relative;
     top: 0px;
     left: 0px;
-       padding-top: 0%;
-       padding-right: 0%;
-       padding-bottom: 0%;
-       padding-left: 0%;
+    padding 0;
+    margin: 0;
+}
 
-       margin-top: 0%;
-       margin-bottom: 0%;
-       margin-right: 0%;
-       margin-left: 0%;
+#centerP {
+    text-align: center;
 }
 
 #info_center
@@ -169,9 +179,13 @@ img {
 }
 
 #ships {
-    padding-left: 33%;
+    padding-left: 31%;
 }
 
 .selected {
-    filter: grayscale(100%);
+    filter: contrast(0); //much easier to see than grayscale(100)
+}
+
+.errorText {
+    color: red;
 }
