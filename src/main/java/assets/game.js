@@ -7,6 +7,7 @@ document.getElementById("reset_button").addEventListener("click", resetPage);
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
+document.getElementById('player').addEventListener("wheel", rotateShip);
 
 function resetPage(){
     var result = confirm("Reload the game?");
@@ -247,35 +248,38 @@ function initGame() {
 
 window.onkeyup = function(e) {
     var key = e.keycode ? e.keycode : e.which;
-
     if(key == 82){
-        document.getElementById("is_vertical").checked = !(document.getElementById("is_vertical").checked);
+        rotateShip();
+    }
+}
 
-        Array.from(document.getElementsByClassName("placed")).forEach((ship) => ship.classList.remove("placed"));
+function rotateShip(){
+	document.getElementById("is_vertical").checked = !(document.getElementById("is_vertical").checked);
 
-        //copied from place above
-        let row = globalRow;
-        let col = globalCol;
-        let size = globalSize;
-        vertical = document.getElementById("is_vertical").checked;
-        let table = document.getElementById("player");
-        for (let i=0; i<size; i++) {
-            let cell;
-            if(vertical) {
-                let tableRow = table.rows[row+i];
-                if (tableRow === undefined) {
-                    // ship is over the edge; let the back end deal with it
-                    break;
-                }
-                cell = tableRow.cells[col];
-            } else {
-                cell = table.rows[row].cells[col+i];
-            }
-            if (cell === undefined) {
-                // ship is over the edge; let the back end deal with it
-                break;
-            }
-            cell.classList.toggle("placed");
-        }
+	Array.from(document.getElementsByClassName("placed")).forEach((ship) => ship.classList.remove("placed"));
+
+	//copied from place above
+	let row = globalRow;
+	let col = globalCol;
+	let size = globalSize;
+	vertical = document.getElementById("is_vertical").checked;
+	let table = document.getElementById("player");
+	for (let i=0; i<size; i++) {
+		let cell;
+		if(vertical) {
+			let tableRow = table.rows[row+i];
+			if (tableRow === undefined) {
+				// ship is over the edge; let the back end deal with it
+				break;
+			}
+			cell = tableRow.cells[col];
+		} else {
+			cell = table.rows[row].cells[col+i];
+		}
+		if (cell === undefined) {
+			// ship is over the edge; let the back end deal with it
+			break;
+		}
+		cell.classList.toggle("placed");
     }
 }
