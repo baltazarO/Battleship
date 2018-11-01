@@ -15,6 +15,9 @@ public class Ship {
 	@JsonProperty private String kind;
 	@JsonProperty private List<Square> occupiedSquares;
 	@JsonProperty private int size;
+	@JsonProperty private Square captainQuarters;
+	//captains quarters is referring to a specific occupied square, it acts like a pointer
+	@JsonProperty private int armour;
 
 	public Ship() {
 		occupiedSquares = new ArrayList<>();
@@ -26,12 +29,15 @@ public class Ship {
 		switch(kind) {
 			case "MINESWEEPER":
 				size = 2;
+				armour = 1;
 				break;
 			case "DESTROYER":
 				size = 3;
+				armour = 2;
 				break;
 			case "BATTLESHIP":
 				size = 4;
+				armour = 2;
 				break;
 		}
 	}
@@ -42,10 +48,17 @@ public class Ship {
 
 	public void place(char col, int row, boolean isVertical) {
 		for (int i=0; i<size; i++) {
+
 			if (isVertical) {
 				occupiedSquares.add(new Square(row+i, col));
+				if(i == size/2){
+					captainQuarters = occupiedSquares.get(i);
+				}
 			} else {
 				occupiedSquares.add(new Square(row, (char) (col + i)));
+				if(i == size/2){
+					captainQuarters = occupiedSquares.get(i);
+				}
 			}
 		}
 	}
@@ -69,20 +82,40 @@ public class Ship {
 		var attackedLocation = new Square(x, y);
 		var square = getOccupiedSquares().stream().filter(s -> s.equals(attackedLocation)).findFirst();
 		if (!square.isPresent()) {
-			return new Result(attackedLocation);
+			return new Result(attackedLocation); //you missed
 		}
 		var attackedSquare = square.get();
+		if(attackedSquare.equals(captainQuarters) && armour > 0){
+            Result critical = new Result(attackedLocation);
+            critical.setShip(this);
+            armour--;
+
+		    if(armour == 1) {
+                //hit CQ for first time, so we give back miss (says to in Sprint 3 page)
+                critical.setResult(AtackStatus.CRITICAL);
+            }
+            else {
+                //armour is 0
+                attackedSquare.hit();
+                critical.setResult(AtackStatus.SUNK);
+            }
+		    return critical;
+        }
+
+		//when square is already hit
 		if (attackedSquare.isHit()) {
 			var result = new Result(attackedLocation);
 			result.setResult(AtackStatus.INVALID);
 			return result;
 		}
 		attackedSquare.hit();
+
+		//default result
 		var result = new Result(attackedLocation);
 		result.setShip(this);
 		if (isSunk()) {
 			result.setResult(AtackStatus.SUNK);
-		} else {
+		} else { //ship still standing
 			result.setResult(AtackStatus.HIT);
 		}
 		return result;
@@ -114,4 +147,10 @@ public class Ship {
 	public String toString() {
 		return kind + occupiedSquares.toString();
 	}
+
+	public Square getCaptainQuarters(){
+		return captainQuarters;
+	}
+
+	public int getArmour(){return armour;}
 }

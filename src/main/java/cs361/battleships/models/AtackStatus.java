@@ -22,7 +22,12 @@ public enum AtackStatus {
 	 * surrender).
 	 */
 	SURRENDER,
-	
+
+	/**
+	 * The result if an attack hits the captains quarters for the first time
+	 */
+	CRITICAL,
+
 	/**
 	 * The result if the coordinates given are invalid.
 	 */
