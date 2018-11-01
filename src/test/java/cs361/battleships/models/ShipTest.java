@@ -164,4 +164,66 @@ public class ShipTest {
         assertTrue(minesweeper1.equals(minesweeper2));
         assertEquals(minesweeper1.hashCode(), minesweeper2.hashCode());
     }
+
+    @Test
+    public void testCaptainsQuartersLocation() {
+
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('A', 1, false);
+        Ship destr = new Ship("DESTROYER");
+        destr.place('H', 5, true);
+        Ship battleS = new Ship("BATTLESHIP");
+        battleS.place('C', 4, true);
+
+        assertEquals('B', mineSw.getCaptainQuarters().getColumn());
+        assertEquals(1, mineSw.getCaptainQuarters().getRow());
+        assertNotEquals('A', mineSw.getCaptainQuarters().getColumn());
+
+        assertEquals('H', destr.getCaptainQuarters().getColumn());
+        assertEquals(6, destr.getCaptainQuarters().getRow());
+        assertNotEquals(7, destr.getCaptainQuarters().getRow());
+
+        assertEquals('C', battleS.getCaptainQuarters().getColumn());
+        assertEquals(6, battleS.getCaptainQuarters().getRow());
+        assertNotEquals(5, battleS.getCaptainQuarters().getRow());
+    }
+
+    @Test
+    public void testCaptainsQuartersSunk() {
+
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('A', 1, false);
+        Ship destr = new Ship("DESTROYER");
+        destr.place('H', 5, true);
+        Ship battleS = new Ship("BATTLESHIP");
+        battleS.place('C', 4, true);
+
+        assertEquals(AtackStatus.SUNK, mineSw.attack(1, 'B').getResult());
+        assertEquals(0, mineSw.getArmour());
+        assertEquals(AtackStatus.CRITICAL, destr.attack(6, 'H').getResult());
+        assertEquals(1, destr.getArmour());
+        assertEquals(AtackStatus.SUNK, destr.attack(6, 'H').getResult());
+        assertEquals(0, destr.getArmour());
+        assertEquals(AtackStatus.CRITICAL, battleS.attack(6, 'C').getResult());
+        assertEquals(1, battleS.getArmour());
+        assertEquals(AtackStatus.SUNK, battleS.attack(6, 'C').getResult());
+        assertEquals(0, battleS.getArmour());
+    }
+
+    @Test
+    public void testHittingCQTooMuch() {
+
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('A', 1, false);
+        Ship destr = new Ship("DESTROYER");
+        destr.place('H', 5, true);
+
+        mineSw.attack(1, 'B');
+        assertEquals(AtackStatus.INVALID, mineSw.attack(1, 'B').getResult());
+
+        destr.attack(6, 'H');
+        destr.attack(6, 'H');
+        assertEquals(AtackStatus.INVALID, destr.attack(6, 'H').getResult());
+    }
+
 }

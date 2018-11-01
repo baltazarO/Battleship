@@ -85,6 +85,22 @@ public class Ship {
 			return new Result(attackedLocation); //you missed
 		}
 		var attackedSquare = square.get();
+		if(attackedSquare.equals(captainQuarters) && armour > 0){
+            Result critical = new Result(attackedLocation);
+            critical.setShip(this);
+            armour--;
+
+		    if(armour == 1) {
+                //hit CQ for first time, so we give back miss (says to in Sprint 3 page)
+                critical.setResult(AtackStatus.CRITICAL);
+            }
+            else {
+                //armour is 0
+                attackedSquare.hit();
+                critical.setResult(AtackStatus.SUNK);
+            }
+		    return critical;
+        }
 
 		//when square is already hit
 		if (attackedSquare.isHit()) {
@@ -97,17 +113,9 @@ public class Ship {
 		//default result
 		var result = new Result(attackedLocation);
 		result.setShip(this);
-		if (isSunk() || armour == 0) {
+		if (isSunk()) {
 			result.setResult(AtackStatus.SUNK);
 		} else { //ship still standing
-
-			//cases here check to see if captQuart was hit
-			if(captainQuarters.equals(attackedSquare)){
-				armour--;
-				result.setResult(AtackStatus.MISS);
-				return result;
-
-			}
 			result.setResult(AtackStatus.HIT);
 		}
 		return result;
@@ -139,4 +147,10 @@ public class Ship {
 	public String toString() {
 		return kind + occupiedSquares.toString();
 	}
+
+	public Square getCaptainQuarters(){
+		return captainQuarters;
+	}
+
+	public int getArmour(){return armour;}
 }
