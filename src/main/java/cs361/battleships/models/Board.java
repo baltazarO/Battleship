@@ -49,7 +49,7 @@ public class Board {
 		//so I need to see if I am some ship's lucky spot if I am, mark atackResult with setCaptain
 		for(int i = 0; i < ships.size(); i++){
 			for(int j = 0; j < ships.get(i).getOccupiedSquares().size(); j++){
-				if(candidateSquare.equals(ships.get(i).getOccupiedSquares().get(j)) && ships.get(i).getOccupiedSquares().get(j).isCaptain()){
+				if(candidateSquare.equals(ships.get(i).getOccupiedSquares().get(j)) && ships.get(i).getOccupiedSquares().get(j).isCaptains()){
 					candidateSquare.setCaptains(true);
 				}
 			}
@@ -62,7 +62,7 @@ public class Board {
 
 	private Result attack(Square s) {
 		//go here if normal attacked square
-		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s)) && !s.isCaptain()) {
+		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s)) && !s.isCaptains()) {
 			var attackResult = new Result(s);
 			attackResult.setResult(AtackStatus.INVALID);
 			return attackResult;

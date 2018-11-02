@@ -87,7 +87,7 @@ public class Ship {
 			return new Result(attackedLocation);
 		}
 		var attackedSquare = square.get();
-		if(attackedSquare.isCaptain() && armour > 0){
+		if(attackedSquare.isCaptains() && armour > 0){
             Result critical = new Result(attackedLocation);
             critical.setShip(this);
             armour--;

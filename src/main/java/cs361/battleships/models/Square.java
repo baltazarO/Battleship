@@ -9,7 +9,7 @@ public class Square {
 	@JsonProperty private int row;
 	@JsonProperty private char column;
 	@JsonProperty private boolean hit = false;
-	@JsonProperty private boolean isCaptains = false;
+	@JsonProperty private boolean captains = false;
 
 	public Square() {
 	}
@@ -26,6 +26,12 @@ public class Square {
 	public int getRow() {
 		return row;
 	}
+
+	public void setCaptains(boolean value){
+		captains = value;
+	}
+
+	public boolean isCaptains(){return captains;}
 
 
 	@Override
@@ -58,10 +64,4 @@ public class Square {
 	public String toString() {
 		return "(" + row + ", " + column + ')';
 	}
-
-	public void setCaptains(boolean value){
-		isCaptains = value;
-	}
-
-	public boolean isCaptain(){return isCaptains;}
 }
