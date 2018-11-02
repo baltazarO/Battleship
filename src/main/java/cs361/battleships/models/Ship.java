@@ -93,11 +93,11 @@ public class Ship {
             armour--;
 
 		    if(armour == 1) {
-                critical.setResult(AtackStatus.CRITICAL);
+		    	critical.setResult(AtackStatus.CRITICAL);
             }
             else {
                 //armour is 0
-                attackedSquare.hit();
+				attackedSquare.hit();
 				for(int i=0; i < getOccupiedSquares().size(); i++){
 					if(!getOccupiedSquares().get(i).isHit()){
 						occupiedSquares.get(i).hit();

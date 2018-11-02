@@ -45,7 +45,6 @@
 }
 
 td:hover {
-    //background-color: gray;
     cursor: crosshair;
     border: 2px solid red;
 }
@@ -62,16 +61,16 @@ td:hover {
     background-color: orange;
 }
 
+.critical{
+    background-color: green;
+}
+
 .sink {
     background-color: red;
 }
 
 .miss {
     background-color: blue;
-}
-
-.critical{
-    background-color: green;
 }
 
 footer {

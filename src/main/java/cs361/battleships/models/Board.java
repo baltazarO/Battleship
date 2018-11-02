@@ -75,12 +75,10 @@ public class Board {
 		var hitShip = shipsAtLocation.get(0);
 		var attackResult = hitShip.attack(s.getRow(), s.getColumn());
 		if (attackResult.getResult() == AtackStatus.SUNK) {
-			if (s.isCaptains()){
-				for(int i=0; i < hitShip.getOccupiedSquares().size(); i++){
-					Result sunkShip = new Result(hitShip.getOccupiedSquares().get(i));
-					sunkShip.setResult(AtackStatus.SUNK);
-					attacks.add(sunkShip);
-				}
+			for(int i=0; i < hitShip.getOccupiedSquares().size(); i++){
+				Result sunkShip = new Result(hitShip.getOccupiedSquares().get(i));
+				sunkShip.setResult(AtackStatus.SUNK);
+				attacks.add(sunkShip);
 			}
 			if (ships.stream().allMatch(ship -> ship.isSunk())) {
 				attackResult.setResult(AtackStatus.SURRENDER);
