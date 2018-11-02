@@ -82,4 +82,13 @@ public class BoardTest {
 
     }
 
+    @Test
+    public void testCQonBoard() {
+
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true);
+        board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true);
+
+        assertEquals(AtackStatus.CRITICAL, board.attack(7, 'D').getResult());
+        assertEquals(AtackStatus.SUNK, board.attack(7, 'D').getResult());
+    }
 }

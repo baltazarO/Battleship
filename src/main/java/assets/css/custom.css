@@ -68,6 +68,10 @@ td:hover {
     background-color: blue;
 }
 
+.critical{
+    background-color: green;
+}
+
 footer {
     background-color: lightblue;
     text-align: center;

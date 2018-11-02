@@ -3,6 +3,7 @@ var placedShips = 0;
 var game;
 var shipType;
 var vertical;
+var armour;
 document.getElementById("reset_button").addEventListener("click", resetPage);
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -96,6 +97,9 @@ function markHits(board, elementId, surrenderText) {
         else if (attack.result === "HIT"){
             className = "hit";
             }
+        else if(attack.result === "CRITICAL"){
+            className = "critical";
+        }
         else if (attack.result === "SUNK"){
             className = "sink"
             }
@@ -227,18 +231,21 @@ function initGame() {
         Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         this.classList.add("selected");
         shipType = "MINESWEEPER";
+        armour = 1;
        registerCellListener(place(2));
     });
     document.getElementById("destroyer").addEventListener("click", function(e) {
         Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         this.classList.add("selected");
         shipType = "DESTROYER";
+        armour = 2;
        registerCellListener(place(3));
     });
     document.getElementById("battleship").addEventListener("click", function(e) {
         Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
         this.classList.add("selected");
         shipType = "BATTLESHIP";
+        armour = 2;
        registerCellListener(place(4));
     });
     sendXhr("GET", "/game", {}, function(data) {
