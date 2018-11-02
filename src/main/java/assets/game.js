@@ -194,13 +194,15 @@ function sendXhr(method, url, data, handler) {
 	req.send(JSON.stringify(data));
 }
 
-var globalRow
-var globalCol
-var globalSize
 function place(size) {
 	return function() {
 		let row = this.parentNode.rowIndex;
 		let col = this.cellIndex;
+        assignPlaced(size, row, col);
+	}
+}
+
+function assignPlaced(size, row, col){
 		vertical = document.getElementById("is_vertical").checked;
 		let table = document.getElementById("player");
 		for (let i=0; i<size; i++) {
@@ -223,15 +225,11 @@ function place(size) {
 		}
 		let cell;
 		if(vertical){
-			cell = table.rows[row+1].cells[col];
+			if(table.rows[row+1] != undefined){cell = table.rows[row+1].cells[col];}
 		} else {
 		    cell = table.rows[row].cells[col+1];
 		}
-		cell.classList.toggle("cq");
-	   globalCol = col;
-	   globalRow = row;
-	   globalSize = size;
-	}
+		if(cell != undefined){cell.classList.toggle("cq");}
 }
 
 function initGame() {
@@ -276,35 +274,20 @@ function rotateShip(){
 	Array.from(document.getElementsByClassName("placed")).forEach((ship) => ship.classList.remove("placed"));
 	Array.from(document.getElementsByClassName("cq")).forEach((ship) => ship.classList.remove("cq"));
 
-	//copied from place above
-	let row = globalRow;
-	let col = globalCol;
-	let size = globalSize;
-	vertical = document.getElementById("is_vertical").checked;
-	let table = document.getElementById("player");
-	for (let i=0; i<size; i++) {
-		let cell;
-		if(vertical) {
-			let tableRow = table.rows[row+i];
-			if (tableRow === undefined) {
-				// ship is over the edge; let the back end deal with it
-				break;
-			}
-			cell = tableRow.cells[col];
-		} else {
-			cell = table.rows[row].cells[col+i];
-		}
-		if (cell === undefined) {
-			// ship is over the edge; let the back end deal with it
-			break;
-		}
-		cell.classList.toggle("placed");
-	}
-	let cell;
-    		if(vertical){
-    			cell = table.rows[row+1].cells[col];
-    		} else {
-    		    cell = table.rows[row].cells[col+1];
-    		}
-    		cell.classList.toggle("cq");
+	if(document.querySelectorAll(":hover")[7] != null){
+	    let myCell = document.querySelectorAll( ":hover" )[7];
+	    if(myCell.parentNode.parentNode == document.getElementById("player")){
+	        let row = myCell.parentNode.rowIndex;
+	        let col = myCell.cellIndex;
+	        let size;
+	        if(shipType == "MINESWEEPER"){
+	            size = 2;
+	        } else if(shipType == "DESTROYER"){
+	            size = 3;
+	        } else if(shipType == "BATTLESHIP"){
+	            size = 4;
+	        }
+            assignPlaced(size, row, col);
+        }
+    }
 }
