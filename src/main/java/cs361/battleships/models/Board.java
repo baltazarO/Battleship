@@ -56,7 +56,7 @@ public class Board {
 		}
 
 		Result attackResult = attack(candidateSquare);
-		attacks.add(attackResult);
+		if(attackResult.getResult() != AtackStatus.INVALID){attacks.add(attackResult);}
 		return attackResult;
 	}
 

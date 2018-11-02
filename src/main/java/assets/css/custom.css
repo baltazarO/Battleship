@@ -65,16 +65,16 @@ td.occupied.captains {
     border-color: green;
 }
 
+.miss {
+    background-color: blue;
+}
+
 .hit {
     background-color: orange;
 }
 
 .critical{
     background-color: green;
-}
-
-.miss {
-    background-color: blue;
 }
 
 .sink {
@@ -189,6 +189,10 @@ img {
 
 #sunk {
     color: red;
+}
+
+#critical {
+    color: green;
 }
 
 #ships {

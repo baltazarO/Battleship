@@ -99,7 +99,7 @@ function markHits(board, elementId, surrenderText) {
 			}
 		else if(attack.result === "CRITICAL"){
 			className = "critical";
-		}
+		    }
 		else if (attack.result === "SUNK"){
 			className = "sink"
 			}
