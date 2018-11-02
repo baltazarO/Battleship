@@ -5,7 +5,7 @@
     height: 30px;
     margin: 0;
     padding: 1px;
-    width: 30px;
+    width: 32px;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
@@ -27,12 +27,12 @@
 }
 
 .battleGrid tr {
-    border: 1px solid black;
+    border: 2px solid black;
     height: 30px;
 }
 
 .battleGrid td {
-    border: 1px solid black;
+    border: 2px solid black;
     width: 30px;
 }
 
@@ -45,7 +45,9 @@
 }
 
 td:hover {
-    background-color: gray;
+    //background-color: gray;
+    cursor: crosshair;
+    border: 2px solid red;
 }
 
 .placed {
