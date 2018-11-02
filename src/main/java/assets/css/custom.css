@@ -57,6 +57,14 @@ td:hover {
     background-color: black;
 }
 
+.cq {
+    background-color: darkgreen;
+}
+
+td.occupied.captains {
+    border-color: green;
+}
+
 .hit {
     background-color: orange;
 }
@@ -65,12 +73,12 @@ td:hover {
     background-color: green;
 }
 
-.sink {
-    background-color: red;
-}
-
 .miss {
     background-color: blue;
+}
+
+.sink {
+    background-color: red;
 }
 
 footer {
