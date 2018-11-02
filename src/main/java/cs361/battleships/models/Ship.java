@@ -40,7 +40,6 @@ public class Ship {
 				break;
 		}
 
-		occupiedSquares = new ArrayList<>();
 	}
 
 	public List<Square> getOccupiedSquares() {
