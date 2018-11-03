@@ -225,9 +225,21 @@ function assignPlaced(size, row, col){
 		}
 		let cell;
 		if(vertical){
-			if(table.rows[row+1] != undefined){cell = table.rows[row+1].cells[col];}
+			if(table.rows[row+1] != undefined){
+			    if(size === 4){
+			        cell = table.rows[row+2].cells[col];
+			    }
+			    else{
+			        cell = table.rows[row+1].cells[col];
+			    }
+			}
 		} else {
-		    cell = table.rows[row].cells[col+1];
+		    if(size === 4){
+		        cell = table.rows[row].cells[col+2];
+		    }
+		    else{
+		        cell = table.rows[row].cells[col+1];
+		    }
 		}
 		if(cell != undefined){cell.classList.toggle("cq");}
 }
