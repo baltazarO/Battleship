@@ -175,17 +175,17 @@ public class ShipTest {
         Ship battleS = new Ship("BATTLESHIP");
         battleS.place('C', 4, true);
 
-        assertEquals('B', mineSw.getCaptainQuarters().getColumn());
-        assertEquals(1, mineSw.getCaptainQuarters().getRow());
-        assertNotEquals('A', mineSw.getCaptainQuarters().getColumn());
+        assertEquals('B', mineSw.getOccupiedSquares().get(1).getColumn());
+        assertEquals(1, mineSw.getOccupiedSquares().get(1).getRow());
+        assertNotEquals('A', mineSw.getOccupiedSquares().get(1).getColumn());
 
-        assertEquals('H', destr.getCaptainQuarters().getColumn());
-        assertEquals(6, destr.getCaptainQuarters().getRow());
-        assertNotEquals(7, destr.getCaptainQuarters().getRow());
+        assertEquals('H', destr.getOccupiedSquares().get(1).getColumn());
+        assertEquals(6, destr.getOccupiedSquares().get(1).getRow());
+        assertNotEquals(7, destr.getOccupiedSquares().get(1).getRow());
 
-        assertEquals('C', battleS.getCaptainQuarters().getColumn());
-        assertEquals(6, battleS.getCaptainQuarters().getRow());
-        assertNotEquals(5, battleS.getCaptainQuarters().getRow());
+        assertEquals('C', battleS.getOccupiedSquares().get(2).getColumn());
+        assertEquals(6, battleS.getOccupiedSquares().get(2).getRow());
+        assertNotEquals(5, battleS.getOccupiedSquares().get(2).getRow());
     }
 
     @Test

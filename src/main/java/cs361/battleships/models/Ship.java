@@ -15,7 +15,6 @@ public class Ship {
 	@JsonProperty private String kind;
 	@JsonProperty private List<Square> occupiedSquares;
 	@JsonProperty private int size;
-	@JsonProperty private Square captainQuarters;
 	//captains quarters is referring to a specific occupied square, it acts like a pointer
 	@JsonProperty private int armour;
 
@@ -40,6 +39,7 @@ public class Ship {
 				armour = 2;
 				break;
 		}
+
 	}
 
 	public List<Square> getOccupiedSquares() {
@@ -52,12 +52,12 @@ public class Ship {
 			if (isVertical) {
 				occupiedSquares.add(new Square(row+i, col));
 				if(i == size/2){
-					captainQuarters = occupiedSquares.get(i);
+					occupiedSquares.get(i).setCaptains(true);
 				}
 			} else {
 				occupiedSquares.add(new Square(row, (char) (col + i)));
 				if(i == size/2){
-					captainQuarters = occupiedSquares.get(i);
+					occupiedSquares.get(i).setCaptains(true);
 				}
 			}
 		}
@@ -81,22 +81,28 @@ public class Ship {
 	public Result attack(int x, char y) {
 		var attackedLocation = new Square(x, y);
 		var square = getOccupiedSquares().stream().filter(s -> s.equals(attackedLocation)).findFirst();
+
 		if (!square.isPresent()) {
-			return new Result(attackedLocation); //you missed
+			//returns miss
+			return new Result(attackedLocation);
 		}
 		var attackedSquare = square.get();
-		if(attackedSquare.equals(captainQuarters) && armour > 0){
+		if(attackedSquare.isCaptains() && armour > 0){
             Result critical = new Result(attackedLocation);
             critical.setShip(this);
             armour--;
 
 		    if(armour == 1) {
-                //hit CQ for first time, so we give back miss (says to in Sprint 3 page)
-                critical.setResult(AtackStatus.CRITICAL);
+		    	critical.setResult(AtackStatus.CRITICAL);
             }
             else {
                 //armour is 0
-                attackedSquare.hit();
+				attackedSquare.hit();
+				for(int i=0; i < getOccupiedSquares().size(); i++){
+					if(!getOccupiedSquares().get(i).isHit()){
+						occupiedSquares.get(i).hit();
+					}
+				}
                 critical.setResult(AtackStatus.SUNK);
             }
 		    return critical;
@@ -110,12 +116,12 @@ public class Ship {
 		}
 		attackedSquare.hit();
 
-		//default result
+		//default
 		var result = new Result(attackedLocation);
 		result.setShip(this);
 		if (isSunk()) {
 			result.setResult(AtackStatus.SUNK);
-		} else { //ship still standing
+		} else {
 			result.setResult(AtackStatus.HIT);
 		}
 		return result;
@@ -148,9 +154,6 @@ public class Ship {
 		return kind + occupiedSquares.toString();
 	}
 
-	public Square getCaptainQuarters(){
-		return captainQuarters;
-	}
 
 	public int getArmour(){return armour;}
 }
