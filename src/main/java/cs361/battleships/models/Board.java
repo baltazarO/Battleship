@@ -22,7 +22,7 @@ public class Board {
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
 	 */
-	public boolean placeShip(Ship ship, int x, char y, boolean isVertical) {
+	public boolean placeShip(Ship ship, int x, char y, boolean isVertical, boolean captIsLeft) {
 		if (ships.size() >= 3) {
 			return false;
 		}
@@ -30,7 +30,7 @@ public class Board {
 			return false;
 		}
 		final var placedShip = new Ship(ship.getKind());
-		placedShip.place(y, x, isVertical);
+		placedShip.place(y, x, isVertical, captIsLeft);
 		if (ships.stream().anyMatch(s -> s.overlaps(placedShip))) {
 			return false;
 		}

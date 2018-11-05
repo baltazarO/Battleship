@@ -10,6 +10,7 @@ public class PlacementGameAction {
     @JsonProperty private int x;
     @JsonProperty private char y;
     @JsonProperty private boolean isVertical;
+    @JsonProperty private boolean captIsLeft;
 
     public Game getGame() {
         return game;
@@ -30,4 +31,6 @@ public class PlacementGameAction {
     public boolean isVertical() {
         return isVertical;
     }
+
+    public boolean isCaptIsLeft() { return captIsLeft;}
 }

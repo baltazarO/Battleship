@@ -3,7 +3,8 @@ var placedShips = 0;
 var game;
 var shipType;
 var vertical;
-var armour;
+var captIsLeft;
+var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -154,7 +155,7 @@ function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
 	if (isSetup) {
-		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical}, function(data) {
+		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
 			Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 			game = data;
 			redrawGrid();
@@ -202,6 +203,7 @@ function place(size) {
 	}
 }
 
+/*New Function derived from the place function, does the same action but makes it easier to set the row and col values when rotating*/
 function assignPlaced(size, row, col){
 		vertical = document.getElementById("is_vertical").checked;
 		let table = document.getElementById("player");
@@ -225,21 +227,13 @@ function assignPlaced(size, row, col){
 		}
 		let cell;
 		if(vertical){
-			if(table.rows[row+1] != undefined){
-			    if(size === 4){
-			        cell = table.rows[row+2].cells[col];
-			    }
-			    else{
-			        cell = table.rows[row+1].cells[col];
-			    }
-			}
+		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+        	else if (!captIsLeft && size === 4){ cell = table.rows[row+2].cells[col]; }
+        	else { cell = table.rows[row+1].cells[col]; }
 		} else {
-		    if(size === 4){
-		        cell = table.rows[row].cells[col+2];
-		    }
-		    else{
-		        cell = table.rows[row].cells[col+1];
-		    }
+		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+            else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
+            else { cell = table.rows[row].cells[col+1]; }
 		}
 		if(cell != undefined){cell.classList.toggle("cq");}
 }
@@ -251,21 +245,18 @@ function initGame() {
 		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 		this.classList.add("selected");
 		shipType = "MINESWEEPER";
-		armour = 1;
 	   registerCellListener(place(2));
 	});
 	document.getElementById("destroyer").addEventListener("click", function(e) {
 		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 		this.classList.add("selected");
 		shipType = "DESTROYER";
-		armour = 2;
 	   registerCellListener(place(3));
 	});
 	document.getElementById("battleship").addEventListener("click", function(e) {
 		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 		this.classList.add("selected");
 		shipType = "BATTLESHIP";
-		armour = 2;
 	   registerCellListener(place(4));
 	});
 	sendXhr("GET", "/game", {}, function(data) {
@@ -273,13 +264,31 @@ function initGame() {
 	});
 };
 
+/*New Functions*/
+/*Detects the 'r' key and invokes rotation before placement*/
 window.onkeyup = function(e) {
 	var key = e.keycode ? e.keycode : e.which;
 	if(key == 82){
+		incrementRotation();
 		rotateShip();
 	}
 }
 
+/*Counts to 4, moving the CQ for the even sized ships every 2nd rotation*/
+function incrementRotation(){
+    if(rotation < 2){
+        captIsLeft = false;
+    } else {
+        captIsLeft = true;
+    }
+    if(rotation < 3){
+        rotation++;
+    } else {
+        rotation = 0;
+    }
+}
+
+/*calls place to reassign the classes that display the placement ui when rotating since the even listener is not triggered*/
 function rotateShip(){
 	document.getElementById("is_vertical").checked = !(document.getElementById("is_vertical").checked);
 
