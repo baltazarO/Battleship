@@ -3,7 +3,7 @@ var placedShips = 0;
 var game;
 var shipType;
 var vertical;
-var captIsLeft;
+var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
