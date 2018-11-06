@@ -46,17 +46,19 @@ public class Ship {
 		return occupiedSquares;
 	}
 
-	public void place(char col, int row, boolean isVertical) {
+	public void place(char col, int row, boolean isVertical, boolean captIsLeft) {
+		var cq = 1;
+		if(captIsLeft && size == 2){ cq = 0; }
+		if(!captIsLeft && size == 4){ cq = 2; }
 		for (int i=0; i<size; i++) {
-
 			if (isVertical) {
 				occupiedSquares.add(new Square(row+i, col));
-				if(i == size/2){
+				if(i == cq){
 					occupiedSquares.get(i).setCaptains(true);
 				}
 			} else {
 				occupiedSquares.add(new Square(row, (char) (col + i)));
-				if(i == size/2){
+				if(i == cq){
 					occupiedSquares.get(i).setCaptains(true);
 				}
 			}
