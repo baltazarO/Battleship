@@ -122,6 +122,7 @@ public class Ship {
 		var result = new Result(attackedLocation);
 		result.setShip(this);
 		if (isSunk()) {
+			//This is not used because the ships can only sink with a CQ as the last hit
 			result.setResult(AtackStatus.SUNK);
 		} else {
 			result.setResult(AtackStatus.HIT);
