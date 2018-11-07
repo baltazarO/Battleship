@@ -3,14 +3,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="flex-box">
     <div id="leftBoard">
+        <div id="opponentSizeButtonContainer">
+            <button class="increaseSize opponent">+</button>
+            <button class="decreaseSize opponent">-</button>
+        </div>
         <table id="row1opponent"></table>
         <table id="opponent" class="battleGrid">
         </table>
         <form action="javascript:void(0);">
             Pick name: <input type="text" name="FirstName" value="Enemy"><br>
         </form>
-        <button class="increaseSize opponent">+</button>
-        <button class="decreaseSize opponent">-</button>
     </div>
     <div id="center">
         <p id="centerP">Select Ships Below to Start Playing!</p>
@@ -26,14 +28,16 @@
         </div>
     </div>
     <div id="rightBoard">
+        <div id="playerSizeButtonContainer">
+            <button class="increaseSize player">+</button>
+            <button class="decreaseSize player">-</button>
+        </div>
         <table id="row1player"></table>
         <table id="player" class="battleGrid">
         </table>
         <form action="javascript:void(0);">
             Pick name: <input type="text" name="FirstName" value="Player"><br>
         </form>
-        <button class="increaseSize player">+</button>
-        <button class="decreaseSize player">-</button>
     </div>
 </div>
 
