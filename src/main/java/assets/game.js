@@ -5,14 +5,6 @@ var shipType;
 var vertical;
 var captIsLeft = false;
 var rotation = 1;
-var hitSound;
-var missSound;
-var criticalSound;
-var sunkSound;
-var surrenderSound;
-var placeSound;
-var pulseSound;
-var errorSound;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -20,13 +12,9 @@ Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => bu
 document.getElementById('player').addEventListener("wheel", rotateShip);
 
 function sound(src) {
-    this.sound = document.createElement("audio");
-    this.sound.src = src;
-    document.body.appendChild(this.sound);
-    this.play = function(){
-        this.sound.currentTime = 0;
-        this.sound.play();
-    }
+    let elem = document.getElementById(src);
+    elem.currentTime = 0;
+    elem.play();
 }
 
 function doOutputResult(message) {
@@ -136,7 +124,7 @@ function markHits(board, elementId, surrenderText) {
 			className = "sink"
 			}
 		else if (attack.result === "SURRENDER"){
-		    surrenderSound.play();
+		    sound("surrender.mp3");
 			resetPage(surrenderText);
 			}
 	    else { classname = null};
@@ -144,10 +132,7 @@ function markHits(board, elementId, surrenderText) {
 	});
 	if(!isSetup){
 	    if(attacker === "player"){
-	        if(className === "miss"){ missSound.play(); }
-	        else if(className === "hit"){ hitSound.play(); }
-	        else if(className === "critical"){ criticalSound.play(); }
-	        else if(className === "sink"){ sunkSound.play(); }
+	        sound(className + ".mp3");
 	    }
 	    doOutputResult(attacker + " " + className);
 	}
@@ -197,7 +182,7 @@ function cellClick() {
 			Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 			game = data;
 			redrawGrid();
-			placeSound.play();
+			sound("place.mp3");
 			doOutputResult("You placed " + shipType);
 			placedShips++;
 			if (placedShips == 3) {
@@ -222,7 +207,7 @@ function sendXhr(method, url, data, handler) {
 			} else {
 				doOutputResult("\nERROR CAN NOT COMPLETE THAT ATTACK!");
 			}
-			errorSound.play();
+			sound("error.mp3");
 			document.getElementById("outputBox").classList.add("errorText");
 			return;
 		}
@@ -277,14 +262,6 @@ function assignPlaced(size, row, col){
 }
 
 function initGame() {
-    missSound = new sound("/assets/miss.mp3");
-    hitSound = new sound("/assets/hit.mp3");
-    criticalSound = new sound("/assets/critical.mp3");
-    sunkSound = new sound("/assets/sunk.mp3");
-    surrenderSound = new sound("/assets/surrender.mp3");
-    pulseSound = new sound("/assets/pulse.mp3");
-    placeSound = new sound("/assets/place.mp3");
-    errorSound = new sound("/assets/error.mp3");
 	makeGrid(document.getElementById("opponent"), false);
 	makeGrid(document.getElementById("player"), true);
 	document.getElementById("minesweeper").addEventListener("click", function(e) {
