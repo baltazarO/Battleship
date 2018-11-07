@@ -22,16 +22,10 @@ document.getElementById('player').addEventListener("wheel", rotateShip);
 function sound(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
-    this.sound.setAttribute("preload", "auto");
-    this.sound.setAttribute("controls", "none");
-    this.sound.style.display = "none";
     document.body.appendChild(this.sound);
     this.play = function(){
         this.sound.currentTime = 0;
         this.sound.play();
-    }
-    this.stop = function(){
-        this.sound.pause();
     }
 }
 
@@ -56,47 +50,25 @@ function help(){
     client.send();
 }
 
-var currPlayerWidth = 0;
-var currPlayerHeight = 0;
-var currOpponentWidth = 0;
-var currOpponentHeight = 0;
 function resize(){
-    let currWidth;
-    let currHeight;
 	if(this.classList.contains("opponent")){
 		var table = document.getElementById("opponent");
 		var row1 = document.getElementById("row1opponent");
-		currWidth = currOpponentWidth;
-		currHeight = currOpponentHeight;
 	}
 	if(this.classList.contains("player")){
 		var table = document.getElementById("player");
 		var row1 = document.getElementById("row1player");
-		currWidth = currPlayerWidth;
-        currHeight = currPlayerHeight;
 	}
+	let currWidth = parseInt(table.style.width,10);
+	let currHeight = parseInt(table.style.height,10);
 	if(currWidth === 0){ currWidth = table.offsetWidth; }
 	if(currHeight === 0){ currHeight = table.offsetHeight; }
 	if(this.classList.contains("increaseSize")){
 		var newWidth = currWidth + 110 + "px";
 		var newHeight = currHeight + 100 + "px";
-		if(this.classList.contains("opponent")){
-		    currOpponentWidth = currWidth + 110;
-            currOpponentHeight = currHeight + 100;
-        } else {
-            currPlayerWidth = currWidth + 110;
-            currPlayerHeight = currHeight + 100;
-        }
 	} else {
 		var newWidth = currWidth - 110 + "px";
 		var newHeight = currHeight - 100 + "px";
-		if(this.classList.contains("opponent")){
-		    currOpponentWidth = currWidth - 110;
-            currOpponentHeight = currHeight - 100;
-        } else {
-            currPlayerWidth = currWidth - 110;
-            currPlayerHeight = currHeight - 100;
-        }
 	}
 	table.style.width = newWidth;
 	table.style.height = newHeight;

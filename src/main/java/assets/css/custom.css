@@ -104,7 +104,12 @@ td:hover {
 
 td:hover:after {
     content: '\00B7';
-    padding-left: 43%;
+    display: block;
+    text-align: center;
+    font-size: 3em;
+    overflow: hidden;
+    height: 20px;
+    line-height: 20px;
 }
 
 /*PLAYER BOARD----------------------------------*/
@@ -230,4 +235,11 @@ button:hover {
     display: flex;
     justify-content: right;
 
+}
+
+/*SOUND STYLING----------------------------*/
+audio {
+    preload: auto;
+    controls: none;
+    display: none;
 }
