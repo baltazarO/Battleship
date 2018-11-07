@@ -56,22 +56,47 @@ function help(){
     client.send();
 }
 
+var currPlayerWidth = 0;
+var currPlayerHeight = 0;
+var currOpponentWidth = 0;
+var currOpponentHeight = 0;
 function resize(){
+    let currWidth;
+    let currHeight;
 	if(this.classList.contains("opponent")){
 		var table = document.getElementById("opponent");
 		var row1 = document.getElementById("row1opponent");
+		currWidth = currOpponentWidth;
+		currHeight = currOpponentHeight;
 	}
 	if(this.classList.contains("player")){
 		var table = document.getElementById("player");
 		var row1 = document.getElementById("row1player");
+		currWidth = currPlayerWidth;
+        currHeight = currPlayerHeight;
 	}
-	var currWidth = table.offsetWidth;
+	if(currWidth === 0){ currWidth = table.offsetWidth; }
+	if(currHeight === 0){ currHeight = table.offsetHeight; }
 	if(this.classList.contains("increaseSize")){
 		var newWidth = currWidth + 110 + "px";
-		var newHeight = currWidth + 66 + "px";
+		var newHeight = currHeight + 100 + "px";
+		if(this.classList.contains("opponent")){
+		    currOpponentWidth = currWidth + 110;
+            currOpponentHeight = currHeight + 100;
+        } else {
+            currPlayerWidth = currWidth + 110;
+            currPlayerHeight = currHeight + 100;
+        }
 	} else {
 		var newWidth = currWidth - 110 + "px";
-		var newHeight = currWidth - 144 + "px";
+		var newHeight = currHeight - 100 + "px";
+		if(this.classList.contains("opponent")){
+		    currOpponentWidth = currWidth - 110;
+            currOpponentHeight = currHeight - 100;
+        } else {
+            currPlayerWidth = currWidth - 110;
+            currPlayerHeight = currHeight - 100;
+        }
 	}
 	table.style.width = newWidth;
 	table.style.height = newHeight;
@@ -173,8 +198,8 @@ function redrawGrid() {
 		    document.getElementById("player").rows[square.row-1].cells[square.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add("captains");
 		}
 	}));
-	markHits(game.opponentsBoard, "opponent", "You won the game, nice job\nClick ok to restart");
-	markHits(game.playersBoard, "player", "You lost the game, ouch\nClick ok to restart");
+	markHits(game.opponentsBoard, "opponent", "You won the game, nice job " + document.getElementById("playerName").value + "\nClick ok to restart");
+	markHits(game.playersBoard, "player", "You lost to " + document.getElementById("opponentName").value + ", ouch\nClick ok to restart");
 }
 
 var oldListener;
