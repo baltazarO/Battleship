@@ -3,6 +3,7 @@
 
 body {
     color: lightgray;
+    margin: 0;
 }
 
 #nodegarden {
@@ -127,6 +128,11 @@ td:hover:after {
     overflow: hidden;
     height: 20px;
     line-height: 20px;
+}
+
+input[type="text"], textarea {
+    color: black;
+    background-color: lightgray;
 }
 
 /*PLAYER BOARD----------------------------------*/
