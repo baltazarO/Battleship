@@ -9,7 +9,10 @@ document.getElementById("reset_button").addEventListener("click", function(){res
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
-document.getElementById('player').addEventListener("wheel", rotateShip);
+document.getElementById('player').addEventListener("wheel", function(){
+    incrementRotation();
+    rotateShip();
+});
 
 function sound(src) {
     let elem = document.getElementById(src);
@@ -258,7 +261,7 @@ function assignPlaced(size, row, col){
             else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
             else { cell = table.rows[row].cells[col+1]; }
 		}
-		if(cell != undefined){cell.classList.toggle("cq");}
+		if(cell != undefined && size != undefined){cell.classList.toggle("cq");}
 }
 
 function initGame() {

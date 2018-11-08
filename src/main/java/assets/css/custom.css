@@ -1,12 +1,23 @@
 /* Add additional stylesheets below
 -------------------------------------------------- */
 
+body {
+    color: lightgray;
+}
+
+#nodegarden {
+    position: absolute;
+    z-index: -1;
+    background-color: #111f56;
+}
+
 footer {
     background-color: lightblue;
     text-align: center;
     height: 40px;
     font-family: verdana;
     font-size: 20px;
+    color: black;
 }
 
 .header {
@@ -20,6 +31,7 @@ footer {
     padding: 20px 0px;
     border: 0px;
     outline: none;
+    color: black;
 }
 
 h1 {
@@ -31,6 +43,11 @@ h1 {
 #help {
     position: relative;
     right: 10px;
+}
+
+#toggleGarden {
+    float: left;
+    display: inline-block;
 }
 
 /*HEADER KEY*/
@@ -218,7 +235,7 @@ td.occupied.captains {
 
 /*BUTTON STYLING-----------------------------*/
 button {
-    background-color: white;
+    background-color: #lightgray;
     color: black;
     border: 2px solid black;
     text-align: center;
@@ -227,7 +244,7 @@ button {
 }
 
 button:hover {
-  background-color: #ddd;
+  background-color: #AAA;
   color: blue;
 }
 
