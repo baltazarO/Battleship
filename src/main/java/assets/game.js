@@ -11,6 +11,17 @@ Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => bu
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 document.getElementById('player').addEventListener("wheel", rotateShip);
 
+function sound(src) {
+    let elem = document.getElementById(src);
+    elem.currentTime = 0;
+    elem.play();
+}
+
+function doOutputResult(message) {
+    document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\n\n" + message +"!";
+    document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
+}
+
 function resetPage(text){
 	var result = confirm(text);
 	if(result == true){
@@ -19,7 +30,12 @@ function resetPage(text){
 }
 
 function help(){
-	alert("How to play the game:\n 1. Place all 3 ships on your board\n 2. Click enemy board to attack\n 3. Game ends when all ships for 1 player are sunk\n\n Have fun!");
+    var client = new XMLHttpRequest();
+    client.addEventListener("load", function(event) {
+        alert(client.responseText);
+    });
+    client.open('GET', '/assets/help.txt');
+    client.send();
 }
 
 function resize(){
@@ -31,13 +47,16 @@ function resize(){
 		var table = document.getElementById("player");
 		var row1 = document.getElementById("row1player");
 	}
-	var currWidth = table.offsetWidth;
+	let currWidth = parseInt(table.style.width,10);
+	let currHeight = parseInt(table.style.height,10);
+	if(currWidth === 0){ currWidth = table.offsetWidth; }
+	if(currHeight === 0){ currHeight = table.offsetHeight; }
 	if(this.classList.contains("increaseSize")){
 		var newWidth = currWidth + 110 + "px";
-		var newHeight = currWidth + 66 + "px";
+		var newHeight = currHeight + 100 + "px";
 	} else {
 		var newWidth = currWidth - 110 + "px";
-		var newHeight = currWidth - 144 + "px";
+		var newHeight = currHeight - 100 + "px";
 	}
 	table.style.width = newWidth;
 	table.style.height = newHeight;
@@ -82,10 +101,10 @@ function makeGrid(table, isPlayer) {
 
 function markHits(board, elementId, surrenderText) {
 	var attacker;
-	if(elementId == "player"){
+	if(elementId === "player"){
 		attacker = "computer";
 	}
-	else if(elementId == "opponent"){
+	else if(elementId === "opponent"){
 		attacker ="player";
 	}
 	let className;
@@ -105,13 +124,17 @@ function markHits(board, elementId, surrenderText) {
 			className = "sink"
 			}
 		else if (attack.result === "SURRENDER"){
+		    sound("surrender.mp3");
 			resetPage(surrenderText);
 			}
+	    else { classname = null};
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
 	if(!isSetup){
-		document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\n" + attacker + " " + className +"!";
-		document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
+	    if(attacker === "player"){
+	        sound(className + ".mp3");
+	    }
+	    doOutputResult(attacker + " " + className);
 	}
 }
 
@@ -132,8 +155,8 @@ function redrawGrid() {
 		    document.getElementById("player").rows[square.row-1].cells[square.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add("captains");
 		}
 	}));
-	markHits(game.opponentsBoard, "opponent", "You won the game, nice job\nClick ok to restart");
-	markHits(game.playersBoard, "player", "You lost the game, ouch\nClick ok to restart");
+	markHits(game.opponentsBoard, "opponent", "You won the game, nice job " + document.getElementById("playerName").value + "\nClick ok to restart");
+	markHits(game.playersBoard, "player", "You lost to " + document.getElementById("opponentName").value + ", ouch\nClick ok to restart");
 }
 
 var oldListener;
@@ -159,8 +182,8 @@ function cellClick() {
 			Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 			game = data;
 			redrawGrid();
-			document.getElementById("outputBox").value=document.getElementById("outputBox").value +  "\nYou placed " + shipType;
-			document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
+			sound("place.mp3");
+			doOutputResult("You placed " + shipType);
 			placedShips++;
 			if (placedShips == 3) {
 				isSetup = false;
@@ -180,12 +203,12 @@ function sendXhr(method, url, data, handler) {
 	req.addEventListener("load", function(event) {
 		if (req.status != 200) {
 			if(isSetup){
-				document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT PLACE SHIP!";
+				doOutputResult("\nERROR CAN NOT PLACE SHIP!");
 			} else {
-				document.getElementById("outputBox").value=document.getElementById("outputBox").value + "\n\nERROR CAN NOT COMPLETE THAT ATTACK!";
+				doOutputResult("\nERROR CAN NOT COMPLETE THAT ATTACK!");
 			}
+			sound("error.mp3");
 			document.getElementById("outputBox").classList.add("errorText");
-			document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
 			return;
 		}
 		handler(JSON.parse(req.responseText));

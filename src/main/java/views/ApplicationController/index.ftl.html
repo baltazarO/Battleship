@@ -3,14 +3,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="flex-box">
     <div id="leftBoard">
+        <div id="opponentSizeButtonContainer">
+            <button class="increaseSize opponent">+</button>
+            <button class="decreaseSize opponent">-</button>
+        </div>
         <table id="row1opponent"></table>
-        <table id="opponent" class="battleGrid">
+        <table id="opponent" class="battleGrid" style="width:360px; height:328px;">
         </table>
         <form action="javascript:void(0);">
-            Pick name: <input type="text" name="FirstName" value="Enemy"><br>
+            Pick name: <input id="opponentName" type="text" name="FirstName" value="Enemy"><br>
         </form>
-        <button class="increaseSize opponent">+</button>
-        <button class="decreaseSize opponent">-</button>
     </div>
     <div id="center">
         <p id="centerP">Select Ships Below to Start Playing!</p>
@@ -26,20 +28,31 @@
         </div>
     </div>
     <div id="rightBoard">
+        <div id="playerSizeButtonContainer">
+            <button class="increaseSize player">+</button>
+            <button class="decreaseSize player">-</button>
+        </div>
         <table id="row1player"></table>
-        <table id="player" class="battleGrid">
+        <table id="player" class="battleGrid" style="width:360px; height:328px;">
         </table>
         <form action="javascript:void(0);">
-            Pick name: <input type="text" name="FirstName" value="Player"><br>
+            Pick name: <input id="playerName" type="text" name="FirstName" value="Player"><br>
         </form>
-        <button class="increaseSize player">+</button>
-        <button class="decreaseSize player">-</button>
     </div>
 </div>
 
 <ul>
     <li><button id="reset_button">Reset</button></li>
 </ul>
+
+<audio id="miss.mp3" src="/assets/miss.mp3"></audio>
+<audio id="hit.mp3" src="/assets/hit.mp3"></audio>
+<audio id="sink.mp3" src="/assets/sunk.mp3"></audio>
+<audio id="place.mp3" src="/assets/place.mp3"></audio>
+<audio id="error.mp3" src="/assets/error.mp3"></audio>
+<audio id="surrender.mp3" src="/assets/surrender.mp3"></audio>
+<audio id="critical.mp3" src="/assets/critical.mp3"></audio>
+<audio id="pulse.mp3" src="/assets/pulse.mp3"></audio>
 
 <script type="text/javascript" src="/assets/game.js"></script>
 <script>

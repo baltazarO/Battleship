@@ -25,6 +25,24 @@ public class BoardTest {
     }
 
     @Test
+    public void testPlaceOverEdge() {
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"), 6, 'J', false, false));
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"), 10, 'E', true, false));
+    }
+
+    @Test
+    public void testPlaceTwice() {
+        assertTrue(board.placeShip(new Ship("MINESWEEPER"),4,'A',false,false));
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"),2,'A',false,false));
+    }
+
+    @Test
+    public void testPlaceOverlap(){
+        assertTrue(board.placeShip(new Ship("MINESWEEPER"),4,'A',false,false));
+        assertFalse(board.placeShip(new Ship("MINESWEEPER"),4,'B',false,false));
+    }
+
+    @Test
     public void testAttackEmptySquare() {
         board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false);
         Result result = board.attack(2, 'E');
@@ -70,7 +88,6 @@ public class BoardTest {
     public void testPlaceMultipleShipsOfSameType() {
         assertTrue(board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false));
         assertFalse(board.placeShip(new Ship("MINESWEEPER"), 5, 'D', true,false));
-
     }
 
     @Test
@@ -79,16 +96,23 @@ public class BoardTest {
         assertTrue(board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,false));
         assertTrue(board.placeShip(new Ship("DESTROYER"), 6, 'A', false,false));
         assertFalse(board.placeShip(new Ship(""), 8, 'A', false,false));
-
     }
 
     @Test
     public void testCQonBoard() {
-
         board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,false);
         board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false);
 
         assertEquals(AtackStatus.CRITICAL, board.attack(7, 'D').getResult());
         assertEquals(AtackStatus.SUNK, board.attack(7, 'D').getResult());
+    }
+
+    @Test
+    public void testCQonBoardAlternateLocation() {
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,true);
+        board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,true);
+
+        assertEquals(AtackStatus.CRITICAL, board.attack(6, 'D').getResult());
+        assertEquals(AtackStatus.SUNK, board.attack(6, 'D').getResult());
     }
 }

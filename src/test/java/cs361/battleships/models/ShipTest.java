@@ -124,6 +124,16 @@ public class ShipTest {
     }
 
     @Test
+    public void testMiss() {
+        Ship minesweeper = new Ship("BATTLESHIP");
+        minesweeper.place('A', 1, true, false);
+
+        Result result = minesweeper.attack(1, 'B');
+        assertEquals(AtackStatus.MISS, result.getResult());
+        assertEquals(new Square(1, 'B'), result.getLocation());
+    }
+
+    @Test
     public void testSink() {
         Ship minesweeper = new Ship("MINESWEEPER");
         minesweeper.place('A', 1, true, false);
