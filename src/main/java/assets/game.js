@@ -247,17 +247,22 @@ function assignPlaced(size, row, col){
 			}
 			cell.classList.toggle("placed");
 		}
-		let cell;
-		if(vertical){
-		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
-        	else if (!captIsLeft && size === 4){ cell = table.rows[row+2].cells[col]; }
-        	else { cell = table.rows[row+1].cells[col]; }
-		} else {
-		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
-            else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
-            else { cell = table.rows[row].cells[col+1]; }
-		}
-		if(cell != undefined && size != undefined){cell.classList.toggle("cq");}
+		assignCQ(size, row, col);
+}
+
+function assignCQ(size, row, col){
+    let table = document.getElementById("player");
+	let cell;
+	if(vertical){
+		if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+        else if (!captIsLeft && size === 4){ cell = table.rows[row+2].cells[col]; }
+        else { cell = table.rows[row+1].cells[col]; }
+	} else {
+		if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+        else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
+        else { cell = table.rows[row].cells[col+1]; }
+	}
+	if(cell != undefined && size != undefined){cell.classList.toggle("cq");}
 }
 
 /*Give this ship type in all lower case!*/
@@ -268,7 +273,6 @@ function initShip(ship, size){
             this.classList.add("selected");
             shipType = ship.toUpperCase();
             registerCellListener(place(size));
-            console.log(shipType);
         }
     });
 }
