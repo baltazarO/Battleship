@@ -9,10 +9,6 @@ document.getElementById("reset_button").addEventListener("click", function(){res
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
-document.getElementById('player').addEventListener("wheel", function(){
-    incrementRotation();
-    rotateShip();
-});
 
 function sound(src) {
     let elem = document.getElementById(src);
@@ -290,11 +286,17 @@ function initGame() {
 	});
 };
 
-/*New Functions*/
+/*rotates ship when scrolling*/
+document.getElementById('player').addEventListener("wheel", function(){
+    if(isSetup){
+        incrementRotation();
+        rotateShip();
+    }
+});
 /*Detects the 'r' key and invokes rotation before placement*/
 window.onkeyup = function(e) {
 	var key = e.keycode ? e.keycode : e.which;
-	if(key == 82){
+	if(key == 82 && isSetup){
 		incrementRotation();
 		rotateShip();
 	}
