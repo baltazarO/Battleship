@@ -260,27 +260,25 @@ function assignPlaced(size, row, col){
 		if(cell != undefined && size != undefined){cell.classList.toggle("cq");}
 }
 
+/*Give this ship type in all lower case!*/
+function initShip(ship, size){
+    document.getElementById(ship).addEventListener("click", function(e) {
+        Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
+        if(isSetup){
+            this.classList.add("selected");
+            shipType = ship.toUpperCase();
+            registerCellListener(place(size));
+            console.log(shipType);
+        }
+    });
+}
+
 function initGame() {
 	makeGrid(document.getElementById("opponent"), false);
 	makeGrid(document.getElementById("player"), true);
-	document.getElementById("minesweeper").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "MINESWEEPER";
-	   registerCellListener(place(2));
-	});
-	document.getElementById("destroyer").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "DESTROYER";
-	   registerCellListener(place(3));
-	});
-	document.getElementById("battleship").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "BATTLESHIP";
-	   registerCellListener(place(4));
-	});
+	initShip("minesweeper", 2);
+	initShip("destroyer", 3);
+	initShip("battleship", 4);
 	sendXhr("GET", "/game", {}, function(data) {
 		game = data;
 	});
