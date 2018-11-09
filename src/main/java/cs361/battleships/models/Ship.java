@@ -38,6 +38,9 @@ public class Ship {
 				size = 4;
 				armour = 2;
 				break;
+			case "SONAR":
+				size = 13;
+				break;
 		}
 
 	}

@@ -55,6 +55,13 @@ h1 {
     color: green;
 }
 
+#locationEmpty{
+    color: grey;
+}
+
+#locationShip{
+    color: black;
+}
 /*BOARDS-------------------------------------------*/
 .flex-box{
     display: flex;

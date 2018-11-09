@@ -22,6 +22,49 @@ function doOutputResult(message) {
     document.getElementById("outputBox").scrollTop = document.getElementById("outputBox").scrollHeight;
 }
 
+// we create the sonar
+function sonarPulse(){
+game.opponentsBoard.ships.forEach((ship) => ship.occupiedSquares.forEach((square) => {
+let table;
+let row = this.parentNode.rowIndex + 1;
+let column = this.cellIndex + 1;
+let getCell;
+table = document.getElementById("opponent");
+
+for (i = -1; i < 2; i++)
+    {
+        for(j = -1; j < 2; j++)
+            {
+                getCell = table.rows[row+i].cells[column+j];
+                console.log(row);
+                console.log(column);
+                getCell.classList.add("locationEmpty");
+                console.log(getCell);
+                console.log(getCell.parentNode.rowIndex);
+                if(getCell == square){
+                getCell.classList = "locationShip";
+                }
+            }
+    }
+}));
+    //cell.removeEventListener("click", oldListener);
+}
+
+// here we are capturing the click
+function registerPulse(){
+let el = document.getElementById("opponent");
+for (i=0; i<10; i++) {
+		for (j=0; j<10; j++) {
+			let cell = el.rows[i].cells[j];
+			cell.addEventListener("click", sonarPulse);
+		}
+	}
+
+}
+
+document.getElementById("sonar_button").addEventListener("click", registerPulse);
+
+
 function resetPage(text){
 	var result = confirm(text);
 	if(result == true){
