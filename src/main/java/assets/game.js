@@ -7,6 +7,7 @@ var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
+document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 
@@ -101,10 +102,10 @@ function makeGrid(table) {
 function markHits(board, elementId, surrenderText) {
 	var attacker;
 	if(elementId === "player"){
-		attacker = "computer";
+		attacker = document.getElementById("opponentName").value;
 	}
 	else if(elementId === "opponent"){
-		attacker ="player";
+		attacker = document.getElementById("playerName").value;
 	}
 	let className;
 	document.getElementById("outputBox").classList.remove("errorText");
@@ -130,7 +131,7 @@ function markHits(board, elementId, surrenderText) {
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
 	if(!isSetup){
-	    if(attacker === "player"){
+	    if(elementId === "opponent"){
 	        sound(className + ".mp3");
 	    }
 	    doOutputResult(attacker + " " + className);
@@ -182,7 +183,7 @@ function cellClick() {
 			game = data;
 			redrawGrid();
 			sound("place.mp3");
-			doOutputResult("You placed " + shipType);
+			doOutputResult(document.getElementById("playerName").value + " placed " + shipType);
 			placedShips++;
 			if (placedShips == 3) {
 				isSetup = false;
