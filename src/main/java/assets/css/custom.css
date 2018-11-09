@@ -55,11 +55,11 @@ h1 {
     color: green;
 }
 
-#locationEmpty{
+.locationEmpty{
     color: grey;
 }
 
-#locationShip{
+.locationShip{
     color: black;
 }
 /*BOARDS-------------------------------------------*/

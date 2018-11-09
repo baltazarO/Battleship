@@ -1,4 +1,5 @@
 var isSetup = true;
+var getClick = true;
 var placedShips = 0;
 var game;
 var shipType;
@@ -31,21 +32,36 @@ let column = this.cellIndex + 1;
 let getCell;
 table = document.getElementById("opponent");
 
-for (i = -1; i < 2; i++)
-    {
-        for(j = -1; j < 2; j++)
-            {
-                getCell = table.rows[row+i].cells[column+j];
-                console.log(row);
-                console.log(column);
-                getCell.classList.add("locationEmpty");
-                console.log(getCell);
-                console.log(getCell.parentNode.rowIndex);
-                if(getCell == square){
-                getCell.classList = "locationShip";
-                }
+    for (i = -1; i < 2; i++){
+            for(j = -1; j < 2; j++){
+                    if (i == 0 && j == 1){
+                        getCell = table.rows[row+0].cells[column+1];
+                    }
+                    else if (i == 0 && j == -1){
+                        getCell = table.rows[row+0].cells[column-1];
+                    }
+                    else if (i == -1 && j == 0){
+                        getCell = table.rows[row-1].cells[column+0];
+                    }
+                    else if (i == 1 && j == 0){
+                        getCell = table.rows[row+1].cells[column+0];
+                    }
+                    else {
+                    getCell = table.rows[row+i].cells[column+j];
+                    }
+                    
+                    console.log(row);
+                    console.log(column);
+                    getCell.classList.add("locationEmpty");
+                    console.log(getCell);
+                    console.log(getCell.parentNode.rowIndex);
+                    if(square.row === getCell.parentNode.rowIndex){
+                    getCell.classList = "locationShip";
+                    }
+
             }
     }
+
 }));
     //cell.removeEventListener("click", oldListener);
 }
@@ -53,17 +69,15 @@ for (i = -1; i < 2; i++)
 // here we are capturing the click
 function registerPulse(){
 let el = document.getElementById("opponent");
-for (i=0; i<10; i++) {
-		for (j=0; j<10; j++) {
+for (i=0; i < 10; i++) {
+		for (j=0; j < 10; j++) {
 			let cell = el.rows[i].cells[j];
 			cell.addEventListener("click", sonarPulse);
 		}
 	}
-
 }
 
-document.getElementById("sonar_button").addEventListener("click", registerPulse);
-
+document.getElementById("sonar_button").addEventListener("click", cellClick);
 
 function resetPage(text){
 	var result = confirm(text);
@@ -220,6 +234,21 @@ function registerCellListener(f) {
 function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
+	//getClick = cell.addEventListener("click");
+	//adding if statement for event listener on click for sonar pulse
+    //cell.addEventListener("click", cellClick)
+    //if (getClick)
+    //{
+    //   let row = this.parentNode.rowIndex + 1;
+    //    let column = this.cellIndex + 1;
+    //   let el = document.getElementById("opponent");
+    //    for (i=0; i < 10; i++) {
+    //    		for (j=0; j < 10; j++) {
+    //    			let cell = el.rows[i].cells[j];
+    //    			cell.addEventListener("click", sonarPulse);
+    //    		}
+    //    }
+    //}
 	if (isSetup) {
 		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
 			Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
