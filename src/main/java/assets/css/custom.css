@@ -56,11 +56,11 @@ h1 {
 }
 
 .locationEmpty{
-    color: grey;
+    background-color: grey;
 }
 
 .locationShip{
-    color: black;
+    background-color: black;
 }
 /*BOARDS-------------------------------------------*/
 .flex-box{

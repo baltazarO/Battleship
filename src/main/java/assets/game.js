@@ -7,7 +7,7 @@ var vertical;
 var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
-document.getElementById("sonar_button").addEventListener("click", function() {cellClick(!getClick)});
+document.getElementById("sonar_button").addEventListener("click", function (){(getClick = !getClick)});
 document.getElementById("help").addEventListener("click", help);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -25,59 +25,83 @@ function doOutputResult(message) {
 }
 
 // we create the sonar
-function sonarPulse(){
+function sonarPulse(row, column){
 game.opponentsBoard.ships.forEach((ship) => ship.occupiedSquares.forEach((square) => {
 let table;
-//let row = this.parentNode.rowIndex + 1;
-//let column = this.cellIndex + 1;
 let getCell;
 table = document.getElementById("opponent");
 
     for (i = -1; i < 2; i++){
             for(j = -1; j < 2; j++){
-                    if (i == 0 && j == 1){
-                        getCell = table.rows[row+0].cells[column+1];
-                    }
-                    else if (i == 0 && j == -1){
-                        getCell = table.rows[row+0].cells[column-1];
-                    }
-                    else if (i == -1 && j == 0){
-                        getCell = table.rows[row-1].cells[column+0];
-                    }
-                    else if (i == 1 && j == 0){
-                        getCell = table.rows[row+1].cells[column+0];
-                    }
-                    else {
-                    getCell = table.rows[row+i].cells[column+j];
-                    }
-
-                    console.log(row);
-                    console.log(column);
                     getCell.classList.add("locationEmpty");
-                    console.log(getCell);
-                    console.log(getCell.parentNode.rowIndex);
-                    if(square.row === getCell.parentNode.rowIndex){
+//                    if (i == 0 && j == 1){
+//                        getCell = table.rows[row+0].cells[column+1];
+//                        if(square.row === getCell.parentNode.rowIndex){
+//                            getCell.classList = "locationShip";
+//                        }
+//                    }
+//                    else if (i == 0 && j == -1){
+//                        getCell = table.rows[row+0].cells[column-1];
+//                        if(square.row === getCell.parentNode.rowIndex){
+//                            getCell.classList = "locationShip";
+//                        }
+//                    }
+//                    else if (i == -1 && j == 0){
+//                        getCell = table.rows[row-1].cells[column+0];
+//                        if(square.row === getCell.parentNode.rowIndex){
+//                            getCell.classList = "locationShip";
+//                        }
+//                    }
+//                    else if (i == 1 && j == 0){
+//                        getCell = table.rows[row+1].cells[column+0];
+//                        if(square.row === getCell.parentNode.rowIndex){
+//                            getCell.classList = "locationShip";
+//                        }
+//                    }
+//                    else {
+//                    getCell = table.rows[row+i].cells[column+j];
+//                        if(square.row === getCell.parentNode.rowIndex){
+//                            getCell.classList = "locationShip";
+//                         }
+//                    }
+
+                   // console.log(row);
+                    //console.log(column);
+                   getCell.classList.add("locationEmpty");
+                    //console.log(getCell);
+                    //console.log(getCell.parentNode.rowIndex);
+                   if(square.row === getCell.parentNode.rowIndex){
                     getCell.classList = "locationShip";
                     }
 
             }
     }
+                             getCell = table.rows[row+2].cells[0];
+                             if(square.row === getCell.parentNode.rowIndex){
+                                 getCell.classList = "locationShip";
+                             }
+       //                  }
+         //                else if (i == 0 && j == -1){
+                             getCell = table.rows[row-2].cells[0];
+                             if(square.row === getCell.parentNode.rowIndex){
+                                 getCell.classList = "locationShip";
+                             }
+           //              }
+                       //  else if (i == -1 && j == 0){
+                             getCell = table.rows[0].cells[column-2];
+                             if(square.row === getCell.parentNode.rowIndex){
+                                 getCell.classList = "locationShip";
+                             }
+                         //}
+                         //else if (i == 1 && j == 0){
+                             getCell = table.rows[0].cells[column+2];
+                             if(square.row === getCell.parentNode.rowIndex){
+                                 getCell.classList = "locationShip";
+                             }
+                         //}
 
 }));
-    //cell.removeEventListener("click", oldListener);
 }
-
-// here we are capturing the click
-//function registerPulse(){
-//let el = document.getElementById("opponent");
-//for (i=0; i < 10; i++) {/
-//		for (j=0; j < 10; j++) {
-//			let cell = el.rows[i].cells[j];
-//			cell.addEventListener("click", sonarPulse);
-//		}
-//	}
-//}
-
 function resetPage(text){
 	var result = confirm(text);
 	if(result == true){
@@ -230,16 +254,16 @@ function registerCellListener(f) {
 	oldListener = f;
 }
 
-function cellClick(someClick) {
+function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
-    if (someClick == true)
+    if (getClick)
     {
         let row = this.parentNode.rowIndex + 1;
         let column = this.cellIndex + 1;
         sonarPulse(row, column);
     }
-	if (isSetup) {
+	else if (isSetup) {
 		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
 			Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
 			game = data;
