@@ -25,91 +25,40 @@ function doOutputResult(message) {
 }
 
 // we create the sonar
-function sonarPulse(row, column){
-game.opponentsBoard.ships.forEach((ship) => ship.occupiedSquares.forEach((square) => {
-let table;
-let getCell;
-table = document.getElementById("opponent");
-
-    for (i = -1; i < 2; i++){
+function sonarPulse(row, column) {
+    let table = document.getElementById("opponent");
+    game.opponentsBoard.ships.forEach((ship) => ship.occupiedSquares.forEach((square) => {
+        for (i = -1; i < 2; i++){
             for(j = -1; j < 2; j++){
-                    getCell.classList.add("locationEmpty");
-//                    if (i == 0 && j == 1){
-//                        getCell = table.rows[row+0].cells[column+1];
-//                        if(square.row === getCell.parentNode.rowIndex){
-//                            getCell.classList = "locationShip";
-//                        }
-//                    }
-//                    else if (i == 0 && j == -1){
-//                        getCell = table.rows[row+0].cells[column-1];
-//                        if(square.row === getCell.parentNode.rowIndex){
-//                            getCell.classList = "locationShip";
-//                        }
-//                    }
-//                    else if (i == -1 && j == 0){
-//                        getCell = table.rows[row-1].cells[column+0];
-//                        if(square.row === getCell.parentNode.rowIndex){
-//                            getCell.classList = "locationShip";
-//                        }
-//                    }
-//                    else if (i == 1 && j == 0){
-//                        getCell = table.rows[row+1].cells[column+0];
-//                        if(square.row === getCell.parentNode.rowIndex){
-//                            getCell.classList = "locationShip";
-//                        }
-//                    }
-//                    else {
-//                    getCell = table.rows[row+i].cells[column+j];
-//                        if(square.row === getCell.parentNode.rowIndex){
-//                            getCell.classList = "locationShip";
-//                         }
-//                    }
-
-                   // console.log(row);
-                    //console.log(column);
-                   getCell.classList.add("locationEmpty");
-                    //console.log(getCell);
-                    //console.log(getCell.parentNode.rowIndex);
-                   if(square.row === getCell.parentNode.rowIndex){
-                    getCell.classList = "locationShip";
-                    }
-
+                sonarCheckCell(table, square, row, column, i, j);
             }
-    }
-                             getCell = table.rows[row+2].cells[0];
-                             if(square.row === getCell.parentNode.rowIndex){
-                                 getCell.classList = "locationShip";
-                             }
-       //                  }
-         //                else if (i == 0 && j == -1){
-                             getCell = table.rows[row-2].cells[0];
-                             if(square.row === getCell.parentNode.rowIndex){
-                                 getCell.classList = "locationShip";
-                             }
-           //              }
-                       //  else if (i == -1 && j == 0){
-                             getCell = table.rows[0].cells[column-2];
-                             if(square.row === getCell.parentNode.rowIndex){
-                                 getCell.classList = "locationShip";
-                             }
-                         //}
-                         //else if (i == 1 && j == 0){
-                             getCell = table.rows[0].cells[column+2];
-                             if(square.row === getCell.parentNode.rowIndex){
-                                 getCell.classList = "locationShip";
-                             }
-                         //}
-
-}));
+        }
+        sonarCheckCell(table, square, row, column, 2, 0);
+        sonarCheckCell(table, square, row, column, -2, 0);
+        sonarCheckCell(table, square, row, column, 0, 2);
+        sonarCheckCell(table, square, row, column, 0, -2);
+    }));
 }
-function resetPage(text){
+
+function sonarCheckCell(table, square, row, column, rowMod, colMod) {
+    let getCell;
+    if(table.rows[row+rowMod] != undefined && table.rows[row+rowMod].cells[column+colMod] != undefined){
+        getCell = table.rows[row+rowMod].cells[column+colMod];
+        getCell.classList.add("locationEmpty");
+        if(square.row === row+rowMod && square.column === String.fromCharCode(column+colMod + 65)){
+            getCell.classList = "locationShip";
+        }
+    }
+}
+
+function resetPage(text) {
 	var result = confirm(text);
 	if(result == true){
 		location.reload();
 	}
 }
 
-function help(){
+function help() {
     var client = new XMLHttpRequest();
     client.addEventListener("load", function(event) {
         alert(client.responseText);
@@ -118,7 +67,7 @@ function help(){
     client.send();
 }
 
-function resize(){
+function resize() {
 	if(this.classList.contains("opponent")){
 		var table = document.getElementById("opponent");
 		var row1 = document.getElementById("row1opponent");
@@ -257,11 +206,9 @@ function registerCellListener(f) {
 function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
-    if (getClick)
-    {
-        let row = this.parentNode.rowIndex + 1;
-        let column = this.cellIndex + 1;
-        sonarPulse(row, column);
+    if (getClick) {
+        let column = this.cellIndex;
+        sonarPulse(row - 1, column);
     }
 	else if (isSetup) {
 		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
