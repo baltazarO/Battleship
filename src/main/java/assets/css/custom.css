@@ -73,13 +73,6 @@ h1 {
     color: green;
 }
 
-.locationEmpty{
-    background-color: grey;
-}
-
-.locationShip{
-    background-color: black;
-}
 /*BOARDS-------------------------------------------*/
 .flex-box{
     display: flex;
@@ -239,11 +232,11 @@ td.occupied.captains {
     background-color: red;
 }
 
-.pulsed {
-    background-color: gray;
+.locationEmpty{
+    background-color: grey;
 }
 
-.detectedShip {
+.locationShip{
     background-color: black;
 }
 

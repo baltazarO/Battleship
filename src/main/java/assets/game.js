@@ -39,6 +39,7 @@ function sonarPulse(row, column) {
         sonarCheckCell(table, square, row, column, 0, -2);
     }));
     pulsesLeft--;
+    document.getElementById("is_sonarPulse").nextSibling.nodeValue = "Sonar Pulse (" + pulsesLeft + ")";
 }
 
 function sonarCheckCell(table, square, row, column, rowMod, colMod) {
