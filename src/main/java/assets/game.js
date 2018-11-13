@@ -45,7 +45,7 @@ function sonarCheckCell(table, square, row, column, rowMod, colMod) {
     if(table.rows[row+rowMod] != undefined && table.rows[row+rowMod].cells[column+colMod] != undefined){
         getCell = table.rows[row+rowMod].cells[column+colMod];
         getCell.classList.add("locationEmpty");
-        if(square.row === row+rowMod && square.column === String.fromCharCode(column+colMod + 65)){
+        if(square.row === row+rowMod+1 && square.column === String.fromCharCode(column+colMod + 65)){
             getCell.classList = "locationShip";
         }
     }
