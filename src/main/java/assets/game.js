@@ -1,5 +1,6 @@
 var isSetup = true;
-var getClick = false;
+var opponentSunk = false;
+var pulsesLeft = 2;
 var placedShips = 0;
 var game;
 var shipType;
@@ -7,7 +8,6 @@ var vertical;
 var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
-document.getElementById("sonar_button").addEventListener("click", function (){(getClick = !getClick)});
 document.getElementById("help").addEventListener("click", help);
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -38,6 +38,7 @@ function sonarPulse(row, column) {
         sonarCheckCell(table, square, row, column, 0, 2);
         sonarCheckCell(table, square, row, column, 0, -2);
     }));
+    pulsesLeft--;
 }
 
 function sonarCheckCell(table, square, row, column, rowMod, colMod) {
@@ -142,20 +143,23 @@ function markHits(board, elementId, surrenderText) {
 		//let className;
 		if (attack.result === "MISS"){
 			className = "miss";
-			}
+		}
 		else if (attack.result === "HIT"){
 			className = "hit";
-			}
+		}
 		else if(attack.result === "CRITICAL"){
 			className = "critical";
-		    }
+		}
 		else if (attack.result === "SUNK"){
 			className = "sink"
+			if(elementId === "opponent"){
+			    opponentSunk = true;
 			}
+		}
 		else if (attack.result === "SURRENDER"){
 		    sound("surrender.mp3");
 			resetPage(surrenderText);
-			}
+		}
 	    else { classname = null};
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
@@ -206,9 +210,16 @@ function registerCellListener(f) {
 function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
-    if (getClick) {
+	let getClick = document.getElementById("is_sonarPulse").checked;
+	document.getElementById("is_sonarPulse").checked = false;
+    if (getClick && opponentSunk && pulsesLeft > 0) {
         let column = this.cellIndex;
         sonarPulse(row - 1, column);
+    }
+    else if(getClick) {
+        doOutputResult("Cannot do Sonar Pulse");
+        sound("error.mp3");
+        document.getElementById("outputBox").classList.add("errorText");
     }
 	else if (isSetup) {
 		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
