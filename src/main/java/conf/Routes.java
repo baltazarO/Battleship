@@ -21,7 +21,6 @@ public class Routes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////    
         router.GET().route("/assets/webjars/{fileName: .*}").with(AssetsController::serveWebJars);
         router.GET().route("/assets/{fileName: .*}").with(AssetsController::serveStatic);
-        router.GET().route("/modal.ftl.html").with(AssetsController::serveStatic);
     }
 
 }
