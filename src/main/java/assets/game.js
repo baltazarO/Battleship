@@ -9,9 +9,9 @@ var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("sonar_button").addEventListener("click", function (){(getClick = !getClick)});
 document.getElementById("help").addEventListener("click", help);
+document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
-document.getElementById('player').addEventListener("wheel", rotateShip);
 
 function sound(src) {
     let elem = document.getElementById(src);
@@ -84,6 +84,7 @@ function resize() {
 		var newWidth = currWidth + 110 + "px";
 		var newHeight = currHeight + 100 + "px";
 	} else {
+	    if(currWidth < 200 && currHeight < 200){ return };
 		var newWidth = currWidth - 110 + "px";
 		var newHeight = currHeight - 100 + "px";
 	}
@@ -92,33 +93,32 @@ function resize() {
 	row1.style.width = newWidth;
 }
 
-function makeGrid(table, isPlayer) {
-	let row1 = document.createElement('tr');
-	for (i=0; i<11; i++){
-		 var itoa = String.fromCharCode(i+64);
-		 if(i == 0){
-			itoa = String.fromCharCode(32);
-		 }
-		 let letters = document.createElement("P");
-		 letters.classList.add("letters");
-		 var t1 = document.createTextNode(itoa);
-		 letters.appendChild(t1);
-		 row1.appendChild(letters);
-	}
-	if(isPlayer){
-		document.getElementById("row1opponent").appendChild(row1);
-	} else {
-		document.getElementById("row1player").appendChild(row1);
-	}
+function makeGridLetters(table) {
+    let row1 = document.createElement('tr');
+    for (i=0; i<11; i++){
+        var itoa = String.fromCharCode(i+64);
+        if(i == 0){
+    	    itoa = String.fromCharCode(32);
+    	}
+    	let letters = document.createElement("P");
+    	letters.classList.add("letters");
+    	var t1 = document.createTextNode(itoa);
+        letters.appendChild(t1);
+        row1.appendChild(letters);
+    }
+    //the first previousSibling, on firefox, is a text node (whitespace)
+    table.previousSibling.previousSibling.appendChild(row1);
+}
 
+function makeGrid(table) {
+    makeGridLetters(table);
 	for (i=0; i<10; i++) {
 		let row = document.createElement('tr');
-
-		 let numbers = document.createElement("P");
-		 numbers.classList.add("numbers");
-		 var t = document.createTextNode(i+1);
-		 numbers.appendChild(t);
-		 row.appendChild(numbers);
+	    let numbers = document.createElement("P");
+		numbers.classList.add("numbers");
+		var t = document.createTextNode(i+1);
+		numbers.appendChild(t);
+		row.appendChild(numbers);
 		for (j=0; j<10; j++) {
 			let column = document.createElement('td');
 			column.addEventListener("click", cellClick);
@@ -131,10 +131,10 @@ function makeGrid(table, isPlayer) {
 function markHits(board, elementId, surrenderText) {
 	var attacker;
 	if(elementId === "player"){
-		attacker = "computer";
+		attacker = document.getElementById("opponentName").value;
 	}
 	else if(elementId === "opponent"){
-		attacker ="player";
+		attacker = document.getElementById("playerName").value;
 	}
 	let className;
 	document.getElementById("outputBox").classList.remove("errorText");
@@ -160,7 +160,7 @@ function markHits(board, elementId, surrenderText) {
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
 	if(!isSetup){
-	    if(attacker === "player"){
+	    if(elementId === "opponent"){
 	        sound(className + ".mp3");
 	    }
 	    doOutputResult(attacker + " " + className);
@@ -172,8 +172,8 @@ function redrawGrid() {
 	Array.from(document.getElementById("player").childNodes).forEach((row) => row.remove());
 	document.getElementById("row1opponent").firstChild.remove();
 	document.getElementById("row1player").firstChild.remove();
-	makeGrid(document.getElementById("opponent"), false);
-	makeGrid(document.getElementById("player"), true);
+	makeGrid(document.getElementById("opponent"));
+	makeGrid(document.getElementById("player"));
 	if (game === undefined) {
 		return;
 	}
@@ -216,7 +216,7 @@ function cellClick() {
 			game = data;
 			redrawGrid();
 			sound("place.mp3");
-			doOutputResult("You placed " + shipType);
+			doOutputResult(document.getElementById("playerName").value + " placed " + shipType);
 			placedShips++;
 			if (placedShips == 3) {
 				isSetup = false;
@@ -281,50 +281,58 @@ function assignPlaced(size, row, col){
 			}
 			cell.classList.toggle("placed");
 		}
-		let cell;
-		if(vertical){
-		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
-        	else if (!captIsLeft && size === 4){ cell = table.rows[row+2].cells[col]; }
-        	else { cell = table.rows[row+1].cells[col]; }
-		} else {
-		    if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
-            else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
-            else { cell = table.rows[row].cells[col+1]; }
-		}
-		if(cell != undefined){cell.classList.toggle("cq");}
+		assignCQ(size, row, col);
+}
+
+function assignCQ(size, row, col){
+    let table = document.getElementById("player");
+	let cell;
+	if(vertical){
+		if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+        else if (!captIsLeft && size === 4){ cell = table.rows[row+2].cells[col]; }
+        else { cell = table.rows[row+1].cells[col]; }
+	} else {
+		if(captIsLeft && size === 2){ cell = table.rows[row].cells[col]; }
+        else if (!captIsLeft && size === 4){ cell = table.rows[row].cells[col+2]; }
+        else { cell = table.rows[row].cells[col+1]; }
+	}
+	if(cell != undefined && size != undefined){cell.classList.toggle("cq");}
+}
+
+/*Give this ship type in all lower case!*/
+function initShip(ship, size){
+    document.getElementById(ship).addEventListener("click", function(e) {
+        Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
+        if(isSetup){
+            this.classList.add("selected");
+            shipType = ship.toUpperCase();
+            registerCellListener(place(size));
+        }
+    });
 }
 
 function initGame() {
-	makeGrid(document.getElementById("opponent"), false);
-	makeGrid(document.getElementById("player"), true);
-	document.getElementById("minesweeper").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "MINESWEEPER";
-	   registerCellListener(place(2));
-	});
-	document.getElementById("destroyer").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "DESTROYER";
-	   registerCellListener(place(3));
-	});
-	document.getElementById("battleship").addEventListener("click", function(e) {
-		Array.from(document.getElementsByClassName("ship")).forEach((ship) => ship.classList.remove("selected"));
-		this.classList.add("selected");
-		shipType = "BATTLESHIP";
-	   registerCellListener(place(4));
-	});
+	makeGrid(document.getElementById("opponent"));
+	makeGrid(document.getElementById("player"));
+	initShip("minesweeper", 2);
+	initShip("destroyer", 3);
+	initShip("battleship", 4);
 	sendXhr("GET", "/game", {}, function(data) {
 		game = data;
 	});
 };
 
-/*New Functions*/
+/*rotates ship when scrolling*/
+document.getElementById('player').addEventListener("wheel", function(){
+    if(isSetup){
+        incrementRotation();
+        rotateShip();
+    }
+});
 /*Detects the 'r' key and invokes rotation before placement*/
 window.onkeyup = function(e) {
 	var key = e.keycode ? e.keycode : e.which;
-	if(key == 82){
+	if(key == 82 && isSetup){
 		incrementRotation();
 		rotateShip();
 	}
