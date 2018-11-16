@@ -83,53 +83,37 @@ public class Ship {
 		return kind;
 	}
 
+	public AtackStatus attackCaptain() {
+		armour--;
+		if(armour == 1) {
+			return AtackStatus.CRITICAL;
+		}
+		else { //armour is 0
+			getOccupiedSquares().stream().forEach(s -> s.hit());
+			return AtackStatus.SUNK;
+		}
+	}
+
 	public Result attack(int x, char y) {
 		var attackedLocation = new Square(x, y);
 		var square = getOccupiedSquares().stream().filter(s -> s.equals(attackedLocation)).findFirst();
-
-		if (!square.isPresent()) {
-			//returns miss
-			return new Result(attackedLocation);
-		}
 		var attackedSquare = square.get();
-		if(attackedSquare.isCaptains() && armour > 0){
-            Result critical = new Result(attackedLocation);
-            critical.setShip(this);
-            armour--;
+		var result = new Result(attackedLocation);
+		result.setShip(this);
 
-		    if(armour == 1) {
-		    	critical.setResult(AtackStatus.CRITICAL);
-            }
-            else {
-                //armour is 0
-				attackedSquare.hit();
-				for(int i=0; i < getOccupiedSquares().size(); i++){
-					if(!getOccupiedSquares().get(i).isHit()){
-						occupiedSquares.get(i).hit();
-					}
-				}
-                critical.setResult(AtackStatus.SUNK);
-            }
-		    return critical;
+		if(attackedSquare.isCaptains() && armour > 0){
+            result.setResult(attackCaptain());
+            return result;
         }
 
 		//when square is already hit
 		if (attackedSquare.isHit()) {
-			var result = new Result(attackedLocation);
 			result.setResult(AtackStatus.INVALID);
 			return result;
 		}
 		attackedSquare.hit();
-
-		//default
-		var result = new Result(attackedLocation);
-		result.setShip(this);
-		if (isSunk()) {
-			//This is not used because the ships can only sink with a CQ as the last hit
-			result.setResult(AtackStatus.SUNK);
-		} else {
-			result.setResult(AtackStatus.HIT);
-		}
+		//No need to check if is sunk because ships can only sink with CQ as last hit
+		result.setResult(AtackStatus.HIT);
 		return result;
 	}
 
