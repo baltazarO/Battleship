@@ -31,7 +31,8 @@ footer {
     line-height: 0px;
     height: 110px;
     margin: 0px;
-    padding: 0px;
+    /*padding: 20px 0px;*/
+    padding: 0px 0px 0px 0px;
     border: 0px;
     outline: none;
     color: black;
@@ -47,8 +48,9 @@ h1 {
 }
 
 #help {
-    position: relative;
-    right: 10px;
+    /*position: relative;
+    right: 10px;*/
+    display: inline;
 }
 
 #toggleGarden {
