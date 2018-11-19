@@ -131,8 +131,10 @@ function NodeGarden() {
   }
 
   NodeGarden.prototype.resize = function() {
-    this.width = this.container.clientWidth * devicePixelRatio;
-    this.height = this.container.clientHeight * devicePixelRatio;
+    this.width = this.container.scrollWidth * devicePixelRatio;
+    console.log(this.container.clientWidth);
+    var actualHeight = Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.offsetHeight);
+    this.height = actualHeight * devicePixelRatio;
     this.area = this.width * this.height;
 
     // calculate nodes needed
