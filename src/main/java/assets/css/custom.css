@@ -1,6 +1,10 @@
 /* Add additional stylesheets below
 -------------------------------------------------- */
 
+html, body, #container {
+    height: 100%;
+}
+
 body {
     color: lightgray;
     font-family: fantasy;
@@ -17,10 +21,14 @@ body {
 footer {
     background-color: lightblue;
     text-align: center;
-    height: 40px;
+    height: 15px;
     font-family: verdana;
-    font-size: 20px;
+    font-size: 14px;
     color: black;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-top: 2px;
 }
 
 .header {
