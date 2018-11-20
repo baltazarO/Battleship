@@ -39,7 +39,6 @@ footer {
     line-height: 0px;
     height: 110px;
     margin: 0px;
-    /*padding: 20px 0px;*/
     padding: 0px 0px 0px 0px;
     border: 0px;
     outline: none;
@@ -94,40 +93,43 @@ h1 {
     flex-wrap: wrap;
 }
 
+.rowMarkersContainer {
+    float: left;
+}
+
+.row1 {
+    position: relative;
+    left: 15px;
+    width: 328px;
+}
+
 .letters {
-    font-size: 12px;
-    height: 30px;
+    font-size: 14px;
+    font-weight: normal;
     margin: 0;
     padding: 1px;
-    width: 28px;
-    min-width: 17px;
+    width: 30.8px;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 }
 
 .numbers {
-    font-size: 12px;
+    font-size: 14px;
     margin: 0;
-    padding: 1px;
-    width: 28px;
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+    padding: 0 2px 0 0;
+    display: block;
+    height: 32.8px;
+    position: relative;
+    top: 8px;
 }
 
 .battleGrid {
     border-spacing: 2px;
 }
 
-.battleGrid tr {
-    min-height: 13px;
-}
-
 .battleGrid td {
     border: 2px solid black;
-    width: 24px;
-    min-width: 13px;
     box-shadow: 1px 1px 6px darkblue;
 }
 
@@ -143,8 +145,8 @@ td:hover {
     text-align: center;
     font-size: 3em;
     overflow: hidden;
-    height: 13px;
-    line-height: 13px;
+    height: 10px;
+    line-height: 10px;
 }*/
 
 input[type="text"], textarea {

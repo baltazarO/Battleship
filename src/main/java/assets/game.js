@@ -42,54 +42,33 @@ function resize(){
 	if(this.classList.contains("opponent")){
 		var table = document.getElementById("opponent");
 		var row1 = document.getElementById("row1opponent");
+		var nums = document.getElementById("rowMarkersContainerOpponent");
 	}
 	if(this.classList.contains("player")){
 		var table = document.getElementById("player");
 		var row1 = document.getElementById("row1player");
+		var nums = document.getElementById("rowMarkersContainerPlayer");
 	}
 	let currWidth = parseInt(table.style.width,10);
 	let currHeight = parseInt(table.style.height,10);
 	if(currWidth === 0){ currWidth = table.offsetWidth; }
 	if(currHeight === 0){ currHeight = table.offsetHeight; }
 	if(this.classList.contains("increaseSize")){
-		var newWidth = currWidth + 110 + "px";
-		var newHeight = currHeight + 100 + "px";
+		var newWidth = currWidth + 100 + "px";
+		var divWidth = (currWidth + 100) / 10 + "px";
 	} else {
-	    if(currWidth < 200 && currHeight < 200){ return };
-		var newWidth = currWidth - 110 + "px";
-		var newHeight = currHeight - 100 + "px";
+		var newWidth = currWidth - 100 + "px";
+		var divWidth = (currWidth - 100) / 10 + "px";
 	}
 	table.style.width = newWidth;
-	table.style.height = newHeight;
+	table.style.height = newWidth;
 	row1.style.width = newWidth;
-}
-
-function makeGridLetters(table) {
-    let row1 = document.createElement('tr');
-    for (i=0; i<11; i++){
-        var itoa = String.fromCharCode(i+64);
-        if(i == 0){
-    	    itoa = String.fromCharCode(32);
-    	}
-    	let letters = document.createElement("P");
-    	letters.classList.add("letters");
-    	var t1 = document.createTextNode(itoa);
-        letters.appendChild(t1);
-        row1.appendChild(letters);
-    }
-    //the first previousSibling, on firefox, is a text node (whitespace)
-    table.previousSibling.previousSibling.appendChild(row1);
+	Array.from(nums.children).forEach((number) => number.style.height = divWidth);
 }
 
 function makeGrid(table) {
-    makeGridLetters(table);
 	for (i=0; i<10; i++) {
 		let row = document.createElement('tr');
-	    let numbers = document.createElement("P");
-		numbers.classList.add("numbers");
-		var t = document.createTextNode(i+1);
-		numbers.appendChild(t);
-		row.appendChild(numbers);
 		for (j=0; j<10; j++) {
 			let column = document.createElement('td');
 			column.addEventListener("click", cellClick);
@@ -141,8 +120,6 @@ function markHits(board, elementId, surrenderText) {
 function redrawGrid() {
 	Array.from(document.getElementById("opponent").childNodes).forEach((row) => row.remove());
 	Array.from(document.getElementById("player").childNodes).forEach((row) => row.remove());
-	document.getElementById("row1opponent").firstChild.remove();
-	document.getElementById("row1player").firstChild.remove();
 	makeGrid(document.getElementById("opponent"));
 	makeGrid(document.getElementById("player"));
 	if (game === undefined) {
