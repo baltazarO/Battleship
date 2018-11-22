@@ -30,4 +30,15 @@ public class GameTest {
         assertTrue(game.attack(1,'A'));
         assertFalse(game.attack(1,'A'));
     }
+
+    @Test
+    public void testMove(){
+        Game game = new Game();
+        assertTrue(game.placeShip(new Ship("BATTLESHIP"), 1, 'B', true, false));
+        assertTrue(game.placeShip(new Ship("MINESWEEPER"), 5, 'D', false, false));
+        assertTrue(game.placeShip(new Ship("DESTROYER"), 9, 'A', false, false));
+
+        assertTrue(game.move(2));
+        assertFalse(game.move(4));
+    }
 }

@@ -115,4 +115,76 @@ public class BoardTest {
         assertEquals(AtackStatus.CRITICAL, board.attack(6, 'D').getResult());
         assertEquals(AtackStatus.SUNK, board.attack(6, 'D').getResult());
     }
+
+    @Test
+    public void testMove3ShipsWest() {
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,true);
+        board.placeShip(new Ship("MINESWEEPER"), 2, 'B', true,true);
+        board.placeShip(new Ship("DESTROYER"), 9, 'G', false,true);
+        board.move(0);
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(5,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(6,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(7,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(8,'C')));
+
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(2,'A')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(3,'A')));
+
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'F')));
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'G')));
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'H')));
+    }
+
+    @Test
+    public void testMoveOverlapNorthBoundry(){
+        board.placeShip(new Ship("BATTLESHIP"), 1, 'D', false,false);
+        board.placeShip(new Ship("MINESWEEPER"), 2, 'D', false,false);
+        board.move(1);
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(1,'D')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(1,'E')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(1,'F')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(1,'G')));
+
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(2,'D')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(2,'E')));
+    }
+
+    @Test
+    public void testMoveOntoMisses(){
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', false,false);
+        Result result = board.attack(4,'D');
+        assertEquals(AtackStatus.MISS, result.getResult());
+        assertEquals(1, board.getAttacksSize());
+        board.move(1);
+        assertEquals(4, board.getAttacksSize());
+    }
+
+    @Test
+    public void testMoveHitCQ(){
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', false,false);
+        board.placeShip(new Ship("MINESWEEPER"), 9, 'B', false,false);
+        Result result = board.attack(5,'F');
+        assertEquals(AtackStatus.CRITICAL, result.getResult());
+        board.move(1);
+        result = board.attack(4,'F');
+        assertEquals(AtackStatus.SUNK, result.getResult());
+    }
+
+    @Test
+    public void testMoveAddMisses(){
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', false,false);
+        board.move(3);
+        assertEquals(4, board.getAttacksSize());
+    }
+
+    @Test
+    public void testMoveHit(){
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', false,false);
+        board.placeShip(new Ship("MINESWEEPER"), 9, 'B', false,false);
+        Result result = board.attack(5,'E');
+        assertEquals(AtackStatus.HIT, result.getResult());
+        board.move(1);
+        result = board.attack(5,'E');
+        assertEquals(AtackStatus.INVALID, result.getResult());
+    }
 }

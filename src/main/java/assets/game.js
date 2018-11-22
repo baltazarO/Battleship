@@ -1,10 +1,13 @@
 var isSetup = true;
+var isMove = false;
 var placedShips = 0;
 var game;
 var shipType;
 var vertical;
 var captIsLeft = false;
 var rotation = 1;
+var numOpponentsShipsSunk = 0;
+var fleetMoves = 2;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
@@ -15,6 +18,13 @@ function sound(src) {
     let elem = document.getElementById(src);
     elem.currentTime = 0;
     elem.play();
+}
+
+function SetVolume(val) {
+    var elems = document.getElementsByTagName("audio");
+    for(var i=0; i<elems.length; i++){
+        elems[i].volume = val / 100;
+    }
 }
 
 function doOutputResult(message) {
@@ -130,9 +140,10 @@ function markHits(board, elementId, surrenderText) {
 	    else { classname = null};
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
-	if(!isSetup){
+	if(!isSetup && !isMove){
 	    if(elementId === "opponent"){
 	        sound(className + ".mp3");
+	        if(className == "sink"){ numOpponentsShipsSunk++; }
 	    }
 	    doOutputResult(attacker + " " + className);
 	}
@@ -343,3 +354,37 @@ function rotateShip(){
         }
     }
 }
+
+/*MOVING FLEET BUTTON FUNCTIONS******************************************************************/
+function requestMove(moveDirection) {
+    if(numOpponentsShipsSunk > 1 && fleetMoves > 0){
+        isMove = true;
+        sendXhr("POST", "/move", {game: game, dir: moveDirection}, function(data) {
+            game = data;
+            redrawGrid();
+            fleetMoves--;
+            isMove = false;
+        })
+    }
+    else {
+        doOutputResult("Cannot move fleet");
+        sound("error.mp3");
+        document.getElementById("outputBox").classList.add("errorText");
+    }
+}
+
+Array.from(document.getElementsByClassName("moveButton")).forEach((butt) => butt.style.visibility = "hidden");
+document.getElementById("movePlayerFleetCenter").addEventListener("click", function(){
+    Array.from(document.getElementsByClassName("moveButton")).forEach((butt) => {
+        if(butt.style.visibility == "hidden"){
+            butt.style.visibility = "visible";
+        }
+        else{
+            butt.style.visibility = "hidden";
+        }
+    });
+});
+document.getElementById("movePlayerFleetWest").addEventListener("click", function(){ requestMove(0); });
+document.getElementById("movePlayerFleetNorth").addEventListener("click", function(){ requestMove(1); });
+document.getElementById("movePlayerFleetEast").addEventListener("click", function(){ requestMove(2); });
+document.getElementById("movePlayerFleetSouth").addEventListener("click", function(){ requestMove(3); });

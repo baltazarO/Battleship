@@ -50,6 +50,11 @@ public class Game {
         return true;
     }
 
+    public boolean move(int dir) {
+        boolean successful = playersBoard.move(dir);
+        return successful;
+    }
+
     private char randCol() {
         int random = new Random().nextInt(10);
         return (char) ('A' + random);

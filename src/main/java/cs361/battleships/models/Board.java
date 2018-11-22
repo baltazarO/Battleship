@@ -41,7 +41,7 @@ public class Board {
 		return true;
 	}
 
-	public boolean sIsCaptainsQ(Square s){
+	private boolean sIsCaptainsQ(Square s){
 		for(int i = 0; i < ships.size(); i++){
 			for(int j = 0; j < ships.get(i).getOccupiedSquares().size(); j++){
 				if(s.equals(ships.get(i).getOccupiedSquares().get(j)) && ships.get(i).getOccupiedSquares().get(j).isCaptains()){
@@ -67,7 +67,7 @@ public class Board {
 		return attackResult;
 	}
 
-	public void sinkShip(Ship ship) {
+	private void sinkShip(Ship ship) {
 		for(int i=0; i < ship.getOccupiedSquares().size(); i++){
 			Result sunkShip = new Result(ship.getOccupiedSquares().get(i));
 			sunkShip.setResult(AtackStatus.SUNK);
@@ -98,7 +98,77 @@ public class Board {
 		return attackResult;
 	}
 
+	public boolean move(int dir) {
+		if(dir > 3){
+			return false;
+		}
+		//Remove all attacks on ships, Its easier to just remove them all since we can get the locations from the ships
+		removeAttacksOnShips();
+		addAttacksOnShips(false);
+		//move all the ships that are not sunk, regardless of overlap
+		ships.forEach((ship) -> {
+			if(!ship.isSunk()){
+				ship.move(dir); //boundries are handled in Ship.java
+			}
+		});
+		//Fix any overlaps, may swap positions of ships depending on order in list
+		var flag = true;
+		while(flag) {
+			flag = false;
+			for(var i=0; i<ships.size(); i++){
+				for(var j=i+1; j<ships.size(); j++){
+					if(ships.get(i).overlaps(ships.get(j))){
+						ships.get(j).move(dir + 2);
+						flag = true;
+					}
+				}
+			}
+		}
+		//remove any attacks in the new positions and add hits to ships and CQ
+		removeAttacksOnShips();
+		addAttacksOnShips(true);
+		return true;
+	}
+
+	private void removeAttacksOnShips(){
+		for(Ship ship : ships){
+			if(!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					attacks.removeIf(r -> r.getLocation().equals(s));
+				}
+			}
+		}
+	}
+
+	private void addAttacksOnShips(boolean afterMove){
+		for(Ship ship : ships) {
+			if (!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					if(s.isHit() && afterMove){
+						Result hit = new Result(s);
+						hit.setResult(AtackStatus.HIT);
+						attacks.add(hit);
+					}
+					if(s.isCaptains() && afterMove){
+						if(ship.getArmour() == 1 && !ship.getKind().equals("MINESWEEPER")){
+							Result crit = new Result(s);
+							crit.setResult(AtackStatus.CRITICAL);
+							attacks.add(crit);
+						}
+					}
+					if(!afterMove){
+						Square missS = new Square(s.getRow(), s.getColumn());
+						Result miss = new Result(missS);
+						attacks.add(miss);
+						miss.setResult(AtackStatus.MISS);
+					}
+				}
+			}
+		}
+	}
+
 	List<Ship> getShips() {
 		return ships;
 	}
+	int getAttacksSize() { return attacks.size(); } //for the tests
 }
