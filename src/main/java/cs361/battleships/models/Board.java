@@ -10,6 +10,8 @@ public class Board {
 
 	@JsonProperty private List<Ship> ships;
 	@JsonProperty private List<Result> attacks;
+	@JsonProperty private int shipsSunk;
+	@JsonProperty private int moveFleetCalls;
 
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
@@ -17,6 +19,8 @@ public class Board {
 	public Board() {
 		ships = new ArrayList<>();
 		attacks = new ArrayList<>();
+		shipsSunk = 0;
+		moveFleetCalls = 2;
 	}
 
 	/*
@@ -77,7 +81,7 @@ public class Board {
 
 	private Result attack(Square s) {
 		//go here if normal attacked square
-		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s)) && !s.isCaptains()) {
+		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s) && !r.getResult().equals(AtackStatus.INVALID)) && !s.isCaptains()) {
 			var attackResult = new Result(s);
 			attackResult.setResult(AtackStatus.INVALID);
 			return attackResult;
@@ -90,6 +94,7 @@ public class Board {
 		var hitShip = shipsAtLocation.get(0);
 		var attackResult = hitShip.attack(s.getRow(), s.getColumn());
 		if (attackResult.getResult() == AtackStatus.SUNK) {
+			shipsSunk++;
 			sinkShip(hitShip);
 			if (ships.stream().allMatch(ship -> ship.isSunk())) {
 				attackResult.setResult(AtackStatus.SURRENDER);
@@ -98,13 +103,13 @@ public class Board {
 		return attackResult;
 	}
 
-	public boolean move(int dir) {
-		if(dir > 3){
+	public boolean move(boolean isPlayersBoard, int dir) {
+		if(dir > 3 || dir < 0){
 			return false;
 		}
-		//Remove all attacks on ships, Its easier to just remove them all since we can get the locations from the ships
-		removeAttacksOnShips();
-		addAttacksOnShips(false);
+		//Invalid attacks wont prevent attacking the square again
+		switchAttackResultsOnShips(AtackStatus.INVALID, AtackStatus.MISS); //convert invalid to miss
+		if(isPlayersBoard){ removeHitsOnShips(); }
 		//move all the ships that are not sunk, regardless of overlap
 		ships.forEach((ship) -> {
 			if(!ship.isSunk()){
@@ -124,51 +129,71 @@ public class Board {
 				}
 			}
 		}
-		//remove any attacks in the new positions and add hits to ships and CQ
-		removeAttacksOnShips();
-		addAttacksOnShips(true);
+		//remove any attacks in the new positions and add hits to ships and CQ for players board
+		switchAttackResultsOnShips(AtackStatus.MISS, AtackStatus.INVALID);
+		if(isPlayersBoard){ addHitsOnShips(); }
+		moveFleetCalls--;
 		return true;
 	}
 
-	private void removeAttacksOnShips(){
+	private void switchAttackResultsOnShips(AtackStatus ifthis, AtackStatus assignthis){
 		for(Ship ship : ships){
 			if(!ship.isSunk()) {
 				for (Square s : ship.getOccupiedSquares()) {
-					attacks.removeIf(r -> r.getLocation().equals(s));
+					for (Result r : attacks) {
+						if (r.getLocation().equals(s) && r.getResult().equals(ifthis)){
+							r.setResult(assignthis);
+						}
+					}
 				}
 			}
 		}
 	}
 
-	private void addAttacksOnShips(boolean afterMove){
+	private void removeHitsOnShips(){
+		for(Ship ship : ships){
+			if(!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					attacks.removeIf(r -> r.getLocation().equals(s) && r.getResult().equals(AtackStatus.HIT) || r.getResult().equals(AtackStatus.CRITICAL));
+				}
+			}
+		}
+	}
+
+	private void addHitsOnShips(){
 		for(Ship ship : ships) {
 			if (!ship.isSunk()) {
 				for (Square s : ship.getOccupiedSquares()) {
-					if(s.isHit() && afterMove){
+					if(s.isHit()){
 						Result hit = new Result(s);
 						hit.setResult(AtackStatus.HIT);
 						attacks.add(hit);
 					}
-					if(s.isCaptains() && afterMove){
+					if(s.isCaptains()){
 						if(ship.getArmour() == 1 && !ship.getKind().equals("MINESWEEPER")){
 							Result crit = new Result(s);
 							crit.setResult(AtackStatus.CRITICAL);
 							attacks.add(crit);
 						}
 					}
-					if(!afterMove){
-						Square missS = new Square(s.getRow(), s.getColumn());
-						Result miss = new Result(missS);
-						attacks.add(miss);
-						miss.setResult(AtackStatus.MISS);
-					}
 				}
 			}
 		}
+	}
+
+	public Square shipLocation(int index) {
+		for( Square s : ships.get(index).getOccupiedSquares()) {
+			if(s.isCaptains()){
+				return s;
+			}
+		}
+		return null;
 	}
 
 	List<Ship> getShips() {
 		return ships;
 	}
 	int getAttacksSize() { return attacks.size(); } //for the tests
+	int getShipsSunk() { return shipsSunk; }
+	int getMoveFleetCalls() { return moveFleetCalls; }
 }

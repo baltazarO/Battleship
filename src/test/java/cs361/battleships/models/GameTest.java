@@ -38,7 +38,11 @@ public class GameTest {
         assertTrue(game.placeShip(new Ship("MINESWEEPER"), 5, 'D', false, false));
         assertTrue(game.placeShip(new Ship("DESTROYER"), 9, 'A', false, false));
 
-        assertTrue(game.move(2));
-        assertFalse(game.move(4));
+        assertTrue(game.attack(game.shipLocation(0).getRow(), game.shipLocation(0).getColumn()));
+        assertTrue(game.attack(game.shipLocation(0).getRow(), game.shipLocation(0).getColumn()));
+        assertTrue(game.attack(game.shipLocation(1).getRow(), game.shipLocation(1).getColumn()));
+
+        assertTrue(game.move(true,2));
+        assertFalse(game.move(true,4));
     }
 }

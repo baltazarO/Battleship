@@ -42,7 +42,7 @@ public class ApplicationController {
 
     public Result move(Context context, MoveGameAction g) {
         Game game = g.getGame();
-        boolean result = game.move(g.getMoveDirection());
+        boolean result = game.move(true, g.getMoveDirection());
         if (result) {
             return Results.json().render(game);
         }

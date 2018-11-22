@@ -47,12 +47,30 @@ public class Game {
             opponentAttackResult = playersBoard.attack(randRow(), randCol());
         } while(opponentAttackResult.getResult() == INVALID);
 
+        if(playersBoard.getShipsSunk() > 1 && opponentsBoard.getMoveFleetCalls() > 0){
+            move(false, new Random().nextInt(3));
+        }
+
         return true;
     }
 
-    public boolean move(int dir) {
-        boolean successful = playersBoard.move(dir);
-        return successful;
+    public boolean move(boolean isPlayersBoard, int dir) {
+        if(!isPlayersBoard && new Random().nextInt(5) == 5) {
+            System.out.println("moving opps fleet");
+            return opponentsBoard.move(false, dir);
+        }
+        if(opponentsBoard.getShipsSunk() > 1 && playersBoard.getMoveFleetCalls() > 0) {
+            System.out.println("moving player fleet");
+            return playersBoard.move(true, dir);
+        }
+        else {
+            return false;
+        }
+    }
+
+    //for the tests
+    public Square shipLocation(int index){
+        return opponentsBoard.shipLocation(index);
     }
 
     private char randCol() {

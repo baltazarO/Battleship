@@ -6,8 +6,6 @@ var shipType;
 var vertical;
 var captIsLeft = false;
 var rotation = 1;
-var numOpponentsShipsSunk = 0;
-var fleetMoves = 2;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
@@ -143,7 +141,6 @@ function markHits(board, elementId, surrenderText) {
 	if(!isSetup && !isMove){
 	    if(elementId === "opponent"){
 	        sound(className + ".mp3");
-	        if(className == "sink"){ numOpponentsShipsSunk++; }
 	    }
 	    doOutputResult(attacker + " " + className);
 	}
@@ -357,20 +354,12 @@ function rotateShip(){
 
 /*MOVING FLEET BUTTON FUNCTIONS******************************************************************/
 function requestMove(moveDirection) {
-    if(numOpponentsShipsSunk > 1 && fleetMoves > 0){
-        isMove = true;
-        sendXhr("POST", "/move", {game: game, dir: moveDirection}, function(data) {
-            game = data;
-            redrawGrid();
-            fleetMoves--;
-            isMove = false;
-        })
-    }
-    else {
-        doOutputResult("Cannot move fleet");
-        sound("error.mp3");
-        document.getElementById("outputBox").classList.add("errorText");
-    }
+    isMove = true;
+    sendXhr("POST", "/move", {game: game, dir: moveDirection}, function(data) {
+        game = data;
+        redrawGrid();
+        isMove = false;
+    })
 }
 
 Array.from(document.getElementsByClassName("moveButton")).forEach((butt) => butt.style.visibility = "hidden");
