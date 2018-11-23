@@ -354,9 +354,9 @@ function rotateShip(){
 
 /*MOVING FLEET BUTTON FUNCTIONS******************************************************************/
 function requestMove(moveDirection) {
-    isMove = true;
     sendXhr("POST", "/move", {game: game, dir: moveDirection}, function(data) {
         game = data;
+        isMove = true;
         redrawGrid();
         isMove = false;
     })

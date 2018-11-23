@@ -261,6 +261,14 @@ public class BoardTest {
 
     @Test
     public void testOverlapSunkShip(){
-
+        board.placeShip(new Ship("MINESWEEPER"), 9, 'B', false, false);
+        board.placeShip(new Ship("BATTLESHIP"), 8, 'A', false, false);
+        Result result = board.attack(9, 'C');
+        assertEquals(AtackStatus.SUNK, result.getResult());
+        board.move(true, 3);
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'A')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'B')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'C')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'D')));
     }
 }
