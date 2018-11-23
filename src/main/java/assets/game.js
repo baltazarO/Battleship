@@ -135,7 +135,7 @@ function markHits(board, elementId, surrenderText) {
 		    sound("surrender.mp3");
 			resetPage(surrenderText);
 			}
-	    else { classname = null};
+	    else { className = "invalid"};
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
 	if(!isSetup && !isMove){

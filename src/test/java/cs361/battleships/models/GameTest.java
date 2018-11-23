@@ -44,5 +44,7 @@ public class GameTest {
 
         assertTrue(game.move(true,2));
         assertFalse(game.move(true,4));
+        assertTrue(game.move(true,1));
+        assertFalse(game.move(true,0));
     }
 }

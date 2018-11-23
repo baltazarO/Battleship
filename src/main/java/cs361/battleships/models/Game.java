@@ -47,20 +47,20 @@ public class Game {
             opponentAttackResult = playersBoard.attack(randRow(), randCol());
         } while(opponentAttackResult.getResult() == INVALID);
 
+        //if the AI can move its fleet, attempt to move the fleet
         if(playersBoard.getShipsSunk() > 1 && opponentsBoard.getMoveFleetCalls() > 0){
-            move(false, new Random().nextInt(3));
+            move(false, new Random().nextInt(4));
         }
 
         return true;
     }
 
     public boolean move(boolean isPlayersBoard, int dir) {
-        if(!isPlayersBoard && new Random().nextInt(5) == 5) {
-            System.out.println("moving opps fleet");
+        var rand = new Random().nextInt(5);
+        if(!isPlayersBoard && rand == 1) {
             return opponentsBoard.move(false, dir);
         }
-        if(opponentsBoard.getShipsSunk() > 1 && playersBoard.getMoveFleetCalls() > 0) {
-            System.out.println("moving player fleet");
+        if(isPlayersBoard && opponentsBoard.getShipsSunk() > 1 && playersBoard.getMoveFleetCalls() > 0) {
             return playersBoard.move(true, dir);
         }
         else {

@@ -228,6 +228,10 @@ img {
     background-color: gray;
 }
 
+.miss, .invalid {
+    background-color: blue;
+}
+
 .occupied {
     background-color: black;
 }
@@ -238,10 +242,6 @@ img {
 
 td.occupied.captains {
     border-color: green;
-}
-
-.miss {
-    background-color: blue;
 }
 
 .hit {

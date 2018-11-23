@@ -181,6 +181,7 @@ public class Board {
 		}
 	}
 
+	//for tests, used to sink opponents randomly placed ships
 	public Square shipLocation(int index) {
 		for( Square s : ships.get(index).getOccupiedSquares()) {
 			if(s.isCaptains()){
@@ -193,7 +194,7 @@ public class Board {
 	List<Ship> getShips() {
 		return ships;
 	}
-	int getAttacksSize() { return attacks.size(); } //for the tests
+	List<Result> getAttacks() { return attacks; } //for the tests
 	int getShipsSunk() { return shipsSunk; }
 	int getMoveFleetCalls() { return moveFleetCalls; }
 }
