@@ -7,11 +7,22 @@
             <button class="increaseSize opponent">+</button>
             <button class="decreaseSize opponent">-</button>
         </div>
-        <table id="row1opponent"></table>
-        <table id="opponent" class="battleGrid" style="width:360px; height:328px;">
+        <table id="row1opponent" class="row1">
+            <tr>
+                <th class="letters">A</th><th class="letters">B</th><th class="letters">C</th>
+                <th class="letters">D</th><th class="letters">E</th><th class="letters">F</th><th class="letters">G</th>
+                <th class="letters">H</th><th class="letters">I</th><th class="letters">J</th>
+            </tr>
+        </table>
+        <div id="rowMarkersContainerOpponent" class="rowMarkersContainer">
+            <p class="numbers">1</p><p class="numbers">2</p><p class="numbers">3</p><p class="numbers">4</p>
+            <p class="numbers">5</p><p class="numbers">6</p><p class="numbers">7</p><p class="numbers">8</p>
+            <p class="numbers">9</p><p class="numbers">10</p>
+        </div>
+        <table id="opponent" class="battleGrid" style="width:328px; height:328px;">
         </table>
         <form action="javascript:void(0);">
-            Pick name: <input id="opponentName" type="text" name="FirstName" value="Enemy"><br>
+            Pick name: <input id="opponentName" type="text" name="FirstName" onClick="this.select();" value="Enemy"><br>
         </form>
     </div>
     <div id="center">
@@ -32,11 +43,22 @@
             <button class="increaseSize player">+</button>
             <button class="decreaseSize player">-</button>
         </div>
-        <table id="row1player"></table>
-        <table id="player" class="battleGrid" style="width:360px; height:328px;">
+        <table id="row1player" class="row1">
+            <tr>
+                <th class="letters">A</th><th class="letters">B</th><th class="letters">C</th>
+                <th class="letters">D</th><th class="letters">E</th><th class="letters">F</th><th class="letters">G</th>
+                <th class="letters">H</th><th class="letters">I</th><th class="letters">J</th>
+            </tr>
+        </table>
+        <div id="rowMarkersContainerPlayer" class="rowMarkersContainer">
+            <p class="numbers">1</p><p class="numbers">2</p><p class="numbers">3</p><p class="numbers">4</p>
+            <p class="numbers">5</p><p class="numbers">6</p><p class="numbers">7</p><p class="numbers">8</p>
+            <p class="numbers">9</p><p class="numbers">10</p>
+        </div>
+        <table id="player" class="battleGrid" style="width:328px; height:328px;">
         </table>
         <form action="javascript:void(0);">
-            Pick name: <input id="playerName" type="text" name="FirstName" value="Player"><br>
+            Pick name: <input id="playerName" type="text" name="FirstName" onClick="this.select();" value="Player"><br>
         </form>
         <div id="movePlayerFleet">
             <button id="movePlayerFleetNorth" class="moveButton">N</button>
@@ -65,6 +87,7 @@
 <script type="text/javascript" src="/assets/nodegarden.js"></script>
 <script>
     initGame();
+    window.onload = function(){ initGarden(); };
 </script>
 
 </@layout.myLayout>

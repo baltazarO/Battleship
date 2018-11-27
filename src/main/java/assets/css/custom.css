@@ -1,8 +1,14 @@
 /* Add additional stylesheets below
 -------------------------------------------------- */
 
+html, body, #container {
+    height: 100%;
+}
+
 body {
     color: lightgray;
+    font-family: fantasy;
+    font-size: 16px;
     margin: 0;
 }
 
@@ -15,10 +21,14 @@ body {
 footer {
     background-color: lightblue;
     text-align: center;
-    height: 40px;
+    height: 15px;
     font-family: verdana;
-    font-size: 20px;
+    font-size: 12px;
     color: black;
+    position: sticky;
+    top: 100%;
+    width: 100%;
+    padding-top: 2px;
 }
 
 .header {
@@ -27,9 +37,9 @@ footer {
     background-color: grey;
     text-align: right;
     line-height: 0px;
-    height: 90px;
+    height: 110px;
     margin: 0px;
-    padding: 20px 0px;
+    padding: 0px 0px 0px 0px;
     border: 0px;
     outline: none;
     color: black;
@@ -39,11 +49,13 @@ h1 {
     text-align: center;
     margin: 0px;
     padding: 0px;
+    font-size: 45px;
+    position: relative;
+    bottom: -50px;
 }
 
 #help {
-    position: relative;
-    right: 10px;
+    display: inline;
 }
 
 #toggleGarden {
@@ -84,40 +96,46 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.rowMarkersContainer {
+    float: left;
+}
+
+.row1 {
+    position: relative;
+    left: 15px;
+    width: 328px;
 }
 
 .letters {
-    height: 30px;
+    font-size: 14px;
+    font-weight: normal;
     margin: 0;
     padding: 1px;
-    width: 28px;
-    min-width: 17px;
+    width: 30.8px;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 }
 
 .numbers {
+    font-size: 14px;
     margin: 0;
-    padding: 1px;
-    width: 28px;
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+    padding: 0 2px 0 0;
+    display: block;
+    height: 32.8px;
+    position: relative;
+    top: 8px;
 }
 
 .battleGrid {
     border-spacing: 2px;
 }
 
-.battleGrid tr {
-    min-height: 13px;
-}
-
 .battleGrid td {
     border: 2px solid black;
-    width: 24px;
-    min-width: 13px;
     box-shadow: 1px 1px 6px darkblue;
 }
 
@@ -127,15 +145,15 @@ td:hover {
     /*same border size, messing with width and height is hard*/
 }
 
-td:hover:after {
+/*td:hover:after {
     content: '\00B7';
     display: block;
     text-align: center;
     font-size: 3em;
     overflow: hidden;
-    height: 13px;
-    line-height: 13px;
-}
+    height: 10px;
+    line-height: 10px;
+}*/
 
 input[type="text"], textarea {
     color: black;
@@ -185,15 +203,19 @@ input[type="text"], textarea {
 /*CENTER---------------------------------------*/
 ul {
     list-style: none;
+    padding: 0;
 }
 
 #center{
     .ls text-align: center;
+    font-size: 16px;
+    font-family: monospace;
     position: relative;
     top: 0px;
     left: 0px;
     padding 0;
     margin: 0;
+    flex: 1 0 228px;
 }
 
 #centerP {
@@ -209,14 +231,14 @@ ul {
 }
 
 /*SHIP PLACE BUTTONS*/
+ul#ships li {
+    text-align: center;
+}
+
 img {
     cursor: pointer;
     padding-top: 10px;
     padding-bottom: 10px;
-}
-
-#ships {
-    padding-left: 31%;
 }
 
 .selected {
