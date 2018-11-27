@@ -248,4 +248,76 @@ public class ShipTest {
         assertEquals(AtackStatus.SUNK, batship.attack(8,'A').getResult());
     }
 
+    @Test
+    public void testMoveWest(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('E', 5, false, true);
+        mineSw.move(0);
+        assertTrue(mineSw.isAtLocation(new Square(5,'D')));
+        assertTrue(mineSw.isAtLocation(new Square(5,'E')));
+    }
+
+    @Test
+    public void testMoveNorth(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('E', 5, false, true);
+        mineSw.move(1);
+        assertTrue(mineSw.isAtLocation(new Square(4,'E')));
+        assertTrue(mineSw.isAtLocation(new Square(4,'F')));
+    }
+
+    @Test
+    public void testMoveEast(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('E', 5, false, true);
+        mineSw.move(2);
+        assertTrue(mineSw.isAtLocation(new Square(5,'G')));
+        assertTrue(mineSw.isAtLocation(new Square(5,'F')));
+    }
+
+    @Test
+    public void testMoveSouth(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('E', 5, false, true);
+        mineSw.move(3);
+        assertTrue(mineSw.isAtLocation(new Square(6,'E')));
+        assertTrue(mineSw.isAtLocation(new Square(6,'F')));
+    }
+
+    @Test
+    public void testMoveWestBoundry(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('A', 7, false, true);
+        mineSw.move(0);
+        assertTrue(mineSw.isAtLocation(new Square(7,'B')));
+        assertTrue(mineSw.isAtLocation(new Square(7,'A')));
+    }
+
+    @Test
+    public void testMoveNorthBoundry(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('G', 1, false, true);
+        mineSw.move(1);
+        assertTrue(mineSw.isAtLocation(new Square(1,'G')));
+        assertTrue(mineSw.isAtLocation(new Square(1,'H')));
+    }
+
+    @Test
+    public void testMoveEastBoundry(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('I', 3, false, true);
+        mineSw.move(2);
+        assertTrue(mineSw.isAtLocation(new Square(3,'J')));
+        assertTrue(mineSw.isAtLocation(new Square(3,'I')));
+    }
+
+    @Test
+    public void testMoveSouthBoundry(){
+        Ship mineSw = new Ship("MINESWEEPER");
+        mineSw.place('A', 10, false, true);
+        mineSw.move(3);
+        assertTrue(mineSw.isAtLocation(new Square(10,'B')));
+        assertTrue(mineSw.isAtLocation(new Square(10,'A')));
+    }
+
 }

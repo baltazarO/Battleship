@@ -27,6 +27,10 @@ public class Square {
 		return row;
 	}
 
+	public void setColumn(char col) { column = col; }
+
+	public void setRow(int newRow) { row = newRow; }
+
 	public void setCaptains(boolean value){
 		captains = value;
 	}

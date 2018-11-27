@@ -1,4 +1,5 @@
 var isSetup = true;
+var isMove = false;
 var placedShips = 0;
 var game;
 var shipType;
@@ -15,6 +16,13 @@ function sound(src) {
     let elem = document.getElementById(src);
     elem.currentTime = 0;
     elem.play();
+}
+
+function SetVolume(val) {
+    var elems = document.getElementsByTagName("audio");
+    for(var i=0; i<elems.length; i++){
+        elems[i].volume = val / 100;
+    }
 }
 
 function doOutputResult(message) {
@@ -127,10 +135,10 @@ function markHits(board, elementId, surrenderText) {
 		    sound("surrender.mp3");
 			resetPage(surrenderText);
 			}
-	    else { classname = null};
+	    else { className = "invalid"};
 		document.getElementById(elementId).rows[attack.location.row-1].cells[attack.location.column.charCodeAt(0) - 'A'.charCodeAt(0)].classList.add(className);
 	});
-	if(!isSetup){
+	if(!isSetup && !isMove){
 	    if(elementId === "opponent"){
 	        sound(className + ".mp3");
 	    }
@@ -343,3 +351,29 @@ function rotateShip(){
         }
     }
 }
+
+/*MOVING FLEET BUTTON FUNCTIONS******************************************************************/
+function requestMove(moveDirection) {
+    sendXhr("POST", "/move", {game: game, dir: moveDirection}, function(data) {
+        game = data;
+        isMove = true;
+        redrawGrid();
+        isMove = false;
+    })
+}
+
+Array.from(document.getElementsByClassName("moveButton")).forEach((butt) => butt.style.visibility = "hidden");
+document.getElementById("movePlayerFleetCenter").addEventListener("click", function(){
+    Array.from(document.getElementsByClassName("moveButton")).forEach((butt) => {
+        if(butt.style.visibility == "hidden"){
+            butt.style.visibility = "visible";
+        }
+        else{
+            butt.style.visibility = "hidden";
+        }
+    });
+});
+document.getElementById("movePlayerFleetWest").addEventListener("click", function(){ requestMove(0); });
+document.getElementById("movePlayerFleetNorth").addEventListener("click", function(){ requestMove(1); });
+document.getElementById("movePlayerFleetEast").addEventListener("click", function(){ requestMove(2); });
+document.getElementById("movePlayerFleetSouth").addEventListener("click", function(){ requestMove(3); });

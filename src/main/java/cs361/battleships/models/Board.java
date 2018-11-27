@@ -10,6 +10,8 @@ public class Board {
 
 	@JsonProperty private List<Ship> ships;
 	@JsonProperty private List<Result> attacks;
+	@JsonProperty private int shipsSunk;
+	@JsonProperty private int moveFleetCalls;
 
 	/*
 	DO NOT change the signature of this method. It is used by the grading scripts.
@@ -17,6 +19,8 @@ public class Board {
 	public Board() {
 		ships = new ArrayList<>();
 		attacks = new ArrayList<>();
+		shipsSunk = 0;
+		moveFleetCalls = 2;
 	}
 
 	/*
@@ -41,7 +45,7 @@ public class Board {
 		return true;
 	}
 
-	public boolean sIsCaptainsQ(Square s){
+	private boolean sIsCaptainsQ(Square s){
 		for(int i = 0; i < ships.size(); i++){
 			for(int j = 0; j < ships.get(i).getOccupiedSquares().size(); j++){
 				if(s.equals(ships.get(i).getOccupiedSquares().get(j)) && ships.get(i).getOccupiedSquares().get(j).isCaptains()){
@@ -67,7 +71,7 @@ public class Board {
 		return attackResult;
 	}
 
-	public void sinkShip(Ship ship) {
+	private void sinkShip(Ship ship) {
 		for(int i=0; i < ship.getOccupiedSquares().size(); i++){
 			Result sunkShip = new Result(ship.getOccupiedSquares().get(i));
 			sunkShip.setResult(AtackStatus.SUNK);
@@ -77,7 +81,7 @@ public class Board {
 
 	private Result attack(Square s) {
 		//go here if normal attacked square
-		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s)) && !s.isCaptains()) {
+		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s) && !r.getResult().equals(AtackStatus.INVALID)) && !s.isCaptains()) {
 			var attackResult = new Result(s);
 			attackResult.setResult(AtackStatus.INVALID);
 			return attackResult;
@@ -90,6 +94,7 @@ public class Board {
 		var hitShip = shipsAtLocation.get(0);
 		var attackResult = hitShip.attack(s.getRow(), s.getColumn());
 		if (attackResult.getResult() == AtackStatus.SUNK) {
+			shipsSunk++;
 			sinkShip(hitShip);
 			if (ships.stream().allMatch(ship -> ship.isSunk())) {
 				attackResult.setResult(AtackStatus.SURRENDER);
@@ -98,7 +103,98 @@ public class Board {
 		return attackResult;
 	}
 
+	public boolean move(boolean isPlayersBoard, int dir) {
+		if(dir > 3 || dir < 0){
+			return false;
+		}
+		//Invalid attacks wont prevent attacking the square again
+		switchAttackResultsOnShips(AtackStatus.INVALID, AtackStatus.MISS); //convert invalid to miss
+		if(isPlayersBoard){ removeHitsOnShips(); }
+		//move all the ships that are not sunk, regardless of overlap
+		ships.forEach((ship) -> {
+			if(!ship.isSunk()){
+				ship.move(dir); //boundries are handled in Ship.java
+			}
+		});
+		//Fix any overlaps, may swap positions of ships depending on order in list
+		var flag = true;
+		while(flag) {
+			flag = false;
+			for(var i=0; i<ships.size(); i++){
+				for(var j=i+1; j<ships.size(); j++){
+					if(ships.get(i).overlaps(ships.get(j))){
+						ships.get(j).move(dir + 2);
+						flag = true;
+					}
+				}
+			}
+		}
+		//remove any attacks in the new positions and add hits to ships and CQ for players board
+		switchAttackResultsOnShips(AtackStatus.MISS, AtackStatus.INVALID);
+		if(isPlayersBoard){ addHitsOnShips(); }
+		moveFleetCalls--;
+		return true;
+	}
+
+	private void switchAttackResultsOnShips(AtackStatus ifthis, AtackStatus assignthis){
+		for(Ship ship : ships){
+			if(!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					for (Result r : attacks) {
+						if (r.getLocation().equals(s) && r.getResult().equals(ifthis)){
+							r.setResult(assignthis);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void removeHitsOnShips(){
+		for(Ship ship : ships){
+			if(!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					attacks.removeIf(r -> r.getLocation().equals(s) && r.getResult().equals(AtackStatus.HIT) || r.getResult().equals(AtackStatus.CRITICAL));
+				}
+			}
+		}
+	}
+
+	private void addHitsOnShips(){
+		for(Ship ship : ships) {
+			if (!ship.isSunk()) {
+				for (Square s : ship.getOccupiedSquares()) {
+					if(s.isHit()){
+						Result hit = new Result(s);
+						hit.setResult(AtackStatus.HIT);
+						attacks.add(hit);
+					}
+					if(s.isCaptains()){
+						if(ship.getArmour() == 1 && !ship.getKind().equals("MINESWEEPER")){
+							Result crit = new Result(s);
+							crit.setResult(AtackStatus.CRITICAL);
+							attacks.add(crit);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//for tests, used to sink opponents randomly placed ships
+	public Square shipLocation(int index) {
+		for( Square s : ships.get(index).getOccupiedSquares()) {
+			if(s.isCaptains()){
+				return s;
+			}
+		}
+		return null;
+	}
+
 	List<Ship> getShips() {
 		return ships;
 	}
+	List<Result> getAttacks() { return attacks; } //for the tests
+	int getShipsSunk() { return shipsSunk; }
+	int getMoveFleetCalls() { return moveFleetCalls; }
 }

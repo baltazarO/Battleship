@@ -51,6 +51,12 @@ h1 {
     display: inline-block;
 }
 
+#volControl {
+    float: left;
+    display: block;
+    border: 1px solid black;
+}
+
 /*HEADER KEY*/
 .key {
     position: relative;
@@ -149,6 +155,24 @@ input[type="text"], textarea {
    margin: 0;
 }
 
+#movePlayerFleet {
+    width: 127px;
+    margin: auto;
+}
+
+#movePlayerFleetCenter {
+    border-radius: 100%;
+}
+
+#movePlayerFleetNorth, #movePlayerFleetSouth {
+    display: block;
+    margin: auto;
+}
+
+#movePlayerFleetWest, #movePlayerFleetEast, #movePlayerFleetCenter {
+    margin: 5px 0px;
+}
+
 /*OPPONENT BOARD-------------------------------*/
 #opponent {
     border: 3px solid red;
@@ -204,6 +228,10 @@ img {
     background-color: gray;
 }
 
+.miss, .invalid {
+    background-color: blue;
+}
+
 .occupied {
     background-color: black;
 }
@@ -214,10 +242,6 @@ img {
 
 td.occupied.captains {
     border-color: green;
-}
-
-.miss {
-    background-color: blue;
 }
 
 .hit {

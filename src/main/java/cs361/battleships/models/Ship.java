@@ -143,4 +143,52 @@ public class Ship {
 
 
 	public int getArmour(){return armour;}
+
+	public void move(int dir) {
+		if(dir == 0 || dir == 4) { //west
+			mover(false, -1);
+		}
+		else if(dir == 1 || dir == 5) { //north
+			mover(true, -1);
+		}
+		else if(dir == 2) { //east
+			mover(false, 1);
+		}
+		else if(dir == 3) { //south
+			mover(true, 1);
+		}
+	}
+
+	private void mover(boolean row, int mod) {
+		if(row) {
+			var flag = true; //used to check out of bounds
+			for(Square s : occupiedSquares) {
+				var checker = new Square(s.getRow() + mod,s.getColumn());
+				if(checker.isOutOfBounds()) {
+					flag = false;
+				}
+			}
+			if(flag) { //actually moves here
+				for(Square s : occupiedSquares) {
+					s.setRow(s.getRow() + mod);
+				}
+			}
+		}
+		else { //if column
+			var flag = true;
+			for(Square s : occupiedSquares) {
+				var y = s.getColumn() + mod;
+				var checker = new Square(s.getRow(),(char) y);
+				if(checker.isOutOfBounds()) {
+					flag = false;
+				}
+			}
+			if(flag) {
+				for(Square s : occupiedSquares) {
+					var y = s.getColumn() + mod;
+					s.setColumn((char) y);
+				}
+			}
+		}
+	}
 }
