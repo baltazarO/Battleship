@@ -12,10 +12,9 @@ import java.util.Set;
 
 public class Ship {
 
-	@JsonProperty private String kind;
-	@JsonProperty private List<Square> occupiedSquares;
-	@JsonProperty private int size;
-	//captains quarters is referring to a specific occupied square, it acts like a pointer
+	@JsonProperty protected String kind;
+	@JsonProperty protected List<Square> occupiedSquares;
+	@JsonProperty protected int size;
 	@JsonProperty private int armour;
 
 	public Ship() {
@@ -143,6 +142,8 @@ public class Ship {
 
 
 	public int getArmour(){return armour;}
+
+	public int getSize(){ return size; }
 
 	public void move(int dir) {
 		if(dir == 0 || dir == 4) { //west

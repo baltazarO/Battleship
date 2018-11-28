@@ -30,11 +30,13 @@ public class Board {
 		if (ships.size() >= 3) {
 			return false;
 		}
+		//checks double placing a ship
 		if (ships.stream().anyMatch(s -> s.getKind().equals(ship.getKind()))) {
 			return false;
 		}
 		final var placedShip = new Ship(ship.getKind());
 		placedShip.place(y, x, isVertical, captIsLeft);
+		//if any ships are overlapping, fail
 		if (ships.stream().anyMatch(s -> s.overlaps(placedShip))) {
 			return false;
 		}
@@ -43,6 +45,43 @@ public class Board {
 		}
 		ships.add(placedShip);
 		return true;
+	}
+
+	public boolean placeSubOnSurface(Submarine sub, int x, char y, boolean isVertical, boolean submerged){
+		if (ships.size() >= 4) {
+			return false;
+		}
+		//checks double placing a ship
+		if (ships.stream().anyMatch(s -> s.getKind().equals(sub.getKind()))) {
+			return false;
+		}
+		final var placedSub = new Submarine();
+		placedSub.place(y, x, isVertical, submerged);
+		//if any ships are overlapping, fail
+		if (ships.stream().anyMatch(s -> s.overlaps(placedSub))) {
+			return false;
+		}
+		if (placedSub.getOccupiedSquares().stream().anyMatch(s -> s.isOutOfBounds())) {
+			return false;
+		}
+		ships.add(placedSub);
+		return true;
+	}
+	public boolean placeSub(Submarine sub, int x, char y, boolean isVertical, boolean submerged){
+		if(!submerged)
+			return placeSubOnSurface(sub, x, y, isVertical, submerged);
+
+		//check if coordinates are under ship
+		Square subHead = new Square(x, y);
+		for(int i = 0; i < ships.size(); i++){
+			for(int j = 0; j < ships.get(i).getOccupiedSquares().size(); j++){
+				if(subHead.equals(ships.get(i).getOccupiedSquares().get(j))) {
+					ships.add(sub);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private boolean sIsCaptainsQ(Square s){

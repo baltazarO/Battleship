@@ -91,10 +91,11 @@ public class BoardTest {
     }
 
     @Test
-    public void testCantPlaceMoreThan3Ships() {
+    public void testCantPlaceMoreThan4Ships() {
         assertTrue(board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false));
         assertTrue(board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,false));
         assertTrue(board.placeShip(new Ship("DESTROYER"), 6, 'A', false,false));
+        assertTrue(board.placeShip(new Submarine(), ));
         assertFalse(board.placeShip(new Ship(""), 8, 'A', false,false));
     }
 

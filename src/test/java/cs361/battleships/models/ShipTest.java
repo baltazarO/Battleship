@@ -320,4 +320,33 @@ public class ShipTest {
         assertTrue(mineSw.isAtLocation(new Square(10,'A')));
     }
 
+    @Test
+    public void testSubmarineCon(){
+        Submarine mySub = new Submarine();
+        assertEquals("SUBMARINE", mySub.getKind());
+        assertEquals(5, mySub.getSize());
+    }
+
+    @Test
+    public void testSubmarinePlace(){
+        Submarine mySub = new Submarine();
+        mySub.place('B', 4, true, true);
+        assertTrue(mySub.isAtLocation(new Square(4, 'B')));
+        assertTrue(mySub.isAtLocation(new Square(5, 'B')));
+        assertTrue(mySub.isAtLocation(new Square(6, 'B')));
+        assertTrue(mySub.isAtLocation(new Square(7, 'B')));
+        assertTrue(mySub.isAtLocation(new Square(5, 'A')));
+        assertFalse(mySub.isAtLocation(new Square(8, 'B')));
+        assertFalse(mySub.isAtLocation(new Square(6, 'A')));
+
+        Submarine mySub_hori = new Submarine();
+        mySub_hori.place('B', 2, false, true);
+        assertTrue(mySub_hori.isAtLocation(new Square(2, 'B')));
+        assertTrue(mySub_hori.isAtLocation(new Square(2, 'C')));
+        assertTrue(mySub_hori.isAtLocation(new Square(2, 'D')));
+        assertTrue(mySub_hori.isAtLocation(new Square(2, 'E')));
+        assertTrue(mySub_hori.isAtLocation(new Square(1, 'D')));
+        assertFalse(mySub_hori.isAtLocation(new Square(2, 'F')));
+        assertFalse(mySub_hori.isAtLocation(new Square(1, 'C')));
+    }
 }
