@@ -28,6 +28,7 @@ public class BoardTest {
     public void testPlaceOverEdge() {
         assertFalse(board.placeShip(new Ship("MINESWEEPER"), 6, 'J', false, false));
         assertFalse(board.placeShip(new Ship("MINESWEEPER"), 10, 'E', true, false));
+        assertFalse(board.placeSub(new Submarine(), 1, 'G', false, false));
     }
 
     @Test
@@ -91,12 +92,24 @@ public class BoardTest {
     }
 
     @Test
-    public void testCantPlaceMoreThan4Ships() {
+    public void testCantPlaceMoreThan4ShipsOnSurface() {
         assertTrue(board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false));
         assertTrue(board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,false));
         assertTrue(board.placeShip(new Ship("DESTROYER"), 6, 'A', false,false));
-        assertTrue(board.placeShip(new Submarine(), ));
+        assertTrue(board.placeSub(new Submarine(), 7, 'G', true, false));
         assertFalse(board.placeShip(new Ship(""), 8, 'A', false,false));
+    }
+
+    @Test
+    public void testLegalOverlap() {
+        assertTrue(board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false));
+        assertTrue(board.placeSub(new Submarine(), 2, 'A', false,true));
+    }
+
+    @Test
+    public void testIllegalSubOverlap() {
+        assertTrue(board.placeShip(new Ship("MINESWEEPER"), 1, 'A', true,false));
+        assertFalse(board.placeSub(new Submarine(), 2, 'A', false,false));
     }
 
     @Test
@@ -271,5 +284,19 @@ public class BoardTest {
         assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'B')));
         assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'C')));
         assertTrue(board.getShips().get(1).isAtLocation(new Square(8,'D')));
+    }
+
+    @Test
+    public void testCantPlaceTwoSubs(){
+        board.placeShip(new Ship("BATTLESHIP"), 4, 'G', false, false);
+        board.placeSub(new Submarine(), 4, 'G', true, true);
+        assertFalse(board.placeSub(new Submarine(), 2, 'A', false, true));
+        assertFalse(board.placeSub(new Submarine(), 2, 'A', false, false));
+    }
+
+    @Test
+    public void testSubKind(){
+        board.placeSub(new Submarine(), 4, 'G', true, false);
+        assertEquals("SUBMARINE", board.getShips().get(0).getKind());
     }
 }

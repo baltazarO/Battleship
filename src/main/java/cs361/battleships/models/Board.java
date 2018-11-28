@@ -47,7 +47,7 @@ public class Board {
 		return true;
 	}
 
-	public boolean placeSubOnSurface(Submarine sub, int x, char y, boolean isVertical, boolean submerged){
+	private boolean placeSubOnSurface(Submarine sub, int x, char y, boolean isVertical, boolean submerged){
 		if (ships.size() >= 4) {
 			return false;
 		}
@@ -68,14 +68,23 @@ public class Board {
 		return true;
 	}
 	public boolean placeSub(Submarine sub, int x, char y, boolean isVertical, boolean submerged){
+		if(ships.size() >= 4)
+			return false;
+		//checks double placing a ship
+		if (ships.stream().anyMatch(s -> s.getKind().equals("SUBMARINE"))) {
+			return false;
+		}
 		if(!submerged)
 			return placeSubOnSurface(sub, x, y, isVertical, submerged);
-
+		//ships must exist to hide a submarine under
+		if(ships.size() == 0)
+			return false;
 		//check if coordinates are under ship
 		Square subHead = new Square(x, y);
 		for(int i = 0; i < ships.size(); i++){
 			for(int j = 0; j < ships.get(i).getOccupiedSquares().size(); j++){
 				if(subHead.equals(ships.get(i).getOccupiedSquares().get(j))) {
+					sub.place(y, x, isVertical, submerged);
 					ships.add(sub);
 					return true;
 				}
