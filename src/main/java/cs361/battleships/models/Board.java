@@ -128,6 +128,12 @@ public class Board {
 	}
 
 	private Result attack(Square s) {
+		/*
+		var shipsAtSquare = ships.stream().filter(ship -> ship.isAtLocation(s)).collect(Collectors.toList());
+		if(shipsAtSquare.size() == 2){
+			//handle two ships, no CQ involved
+
+		}*/
 		//go here if normal attacked square
 		if (attacks.stream().anyMatch(r -> r.getLocation().equals(s) && !r.getResult().equals(AtackStatus.INVALID)) && !s.isCaptains()) {
 			var attackResult = new Result(s);

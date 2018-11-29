@@ -43,5 +43,8 @@ public class Submarine extends Ship{
         return super.overlaps(other);
     }
 
+    public boolean isUnderwater(){
+        return isSubmerged;
+    }
 
 }

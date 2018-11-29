@@ -299,4 +299,29 @@ public class BoardTest {
         board.placeSub(new Submarine(), 4, 'G', true, false);
         assertEquals("SUBMARINE", board.getShips().get(0).getKind());
     }
+
+    @Test
+    public void testSubCQLocUnder(){
+        board.placeShip(new Ship("BATTLESHIP"), 1, 'A', true, false);
+        board.placeSub(new Submarine(), 4, 'A', false, true);
+        assertEquals('D', board.getShips().get(1).getOccupiedSquares().get(3).getColumn());
+        assertEquals(4, board.getShips().get(1).getOccupiedSquares().get(3).getRow());
+        Submarine mySub = (Submarine) board.getShips().get(1);
+        assertTrue(mySub.isUnderwater());
+
+    }
+
+    @Test
+    public void testSubCQLocSurface(){
+        board.placeSub(new Submarine(), 4, 'A', false, false);
+        assertEquals('D', board.getShips().get(0).getOccupiedSquares().get(3).getColumn());
+        assertEquals(4, board.getShips().get(0).getOccupiedSquares().get(3).getRow());
+    }
+
+    @Test
+    public void testAtackOverlap() {
+        board.placeShip(new Ship("BATTLESHIP"), 1, 'A', true, false);
+        board.placeSub(new Submarine(), 4, 'A', false, true);
+        board.attack(4, 'A');
+    }
 }
