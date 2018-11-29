@@ -318,10 +318,17 @@ public class BoardTest {
         assertEquals(4, board.getShips().get(0).getOccupiedSquares().get(3).getRow());
     }
 
+    /*
+    needs the laser to even be tested
     @Test
     public void testAtackOverlap() {
         board.placeShip(new Ship("BATTLESHIP"), 1, 'A', true, false);
         board.placeSub(new Submarine(), 4, 'A', false, true);
         board.attack(4, 'A');
+        board.attack(1, 'A');
+        board.attack(2, 'A');
+        board.attack(3, 'A');
+        board.attack(3, 'A');
     }
+    */
 }
