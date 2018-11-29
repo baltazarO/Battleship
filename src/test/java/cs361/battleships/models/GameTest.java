@@ -9,6 +9,7 @@ public class GameTest {
     @Test
     public void testPlace(){
         Game game = new Game();
+        assertFalse(game.placeSub(new Submarine(), 2, 'B', false, true));
         assertFalse(game.placeShip(new Ship("MINESWEEPER"), 11, 'J',false,false));
         assertTrue(game.placeShip(new Ship("BATTLESHIP"), 1, 'B', true, false));
         assertFalse(game.placeShip(new Ship("MINESWEEPER"), 6, 'J',false,false));
@@ -17,7 +18,9 @@ public class GameTest {
         assertFalse(game.placeShip(new Ship("BATTLESHIP"),4,'G',false,false));
         assertTrue(game.placeShip(new Ship("MINESWEEPER"), 5, 'D', false, false));
         assertTrue(game.placeShip(new Ship("DESTROYER"), 9, 'A', false, false));
+        assertTrue(game.placeSub(new Submarine(), 9, 'A', false, true));
         assertFalse(game.placeShip(new Ship("MINESWEEPER"),2,'G',false,false));
+        assertFalse(game.placeSub(new Submarine(), 1, 'G', true, false));
     }
 
     @Test
@@ -26,9 +29,11 @@ public class GameTest {
         assertTrue(game.placeShip(new Ship("BATTLESHIP"), 1, 'B', true, false));
         assertTrue(game.placeShip(new Ship("MINESWEEPER"), 5, 'D', false, false));
         assertTrue(game.placeShip(new Ship("DESTROYER"), 9, 'A', false, false));
+        assertTrue(game.placeSub(new Submarine(), 2, 'G', false, false));
 
         assertTrue(game.attack(1,'A'));
         assertFalse(game.attack(1,'A'));
+        assertTrue(game.attack(2, 'G'));
     }
 
     @Test
@@ -37,6 +42,7 @@ public class GameTest {
         assertTrue(game.placeShip(new Ship("BATTLESHIP"), 1, 'B', true, false));
         assertTrue(game.placeShip(new Ship("MINESWEEPER"), 5, 'D', false, false));
         assertTrue(game.placeShip(new Ship("DESTROYER"), 9, 'A', false, false));
+        assertTrue(game.placeSub(new Submarine(), 2, 'G', false, false));
 
         assertTrue(game.attack(game.shipLocation(0).getRow(), game.shipLocation(0).getColumn()));
         assertTrue(game.attack(game.shipLocation(0).getRow(), game.shipLocation(0).getColumn()));

@@ -176,6 +176,10 @@ public class Board {
 			for(var i=0; i<ships.size(); i++){
 				for(var j=i+1; j<ships.size(); j++){
 					if(ships.get(i).overlaps(ships.get(j))){
+						if(ships.get(j).getKind() == "SUBMARINE"){
+							Submarine sub = (Submarine) ships.get(j);
+							if(sub.isUnderwater()){ continue; }
+						}
 						ships.get(j).move(dir + 2);
 						flag = true;
 					}

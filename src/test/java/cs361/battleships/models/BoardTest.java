@@ -150,6 +150,32 @@ public class BoardTest {
     }
 
     @Test
+    public void testMove4ShipsWest() {
+        board.placeShip(new Ship("BATTLESHIP"), 5, 'D', true,true);
+        board.placeShip(new Ship("MINESWEEPER"), 2, 'B', true,true);
+        board.placeShip(new Ship("DESTROYER"), 9, 'G', false,true);
+        board.placeSub(new Submarine(), 5, 'D', true, true);
+        board.move(true,0);
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(5,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(6,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(7,'C')));
+        assertTrue(board.getShips().get(0).isAtLocation(new Square(8,'C')));
+
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(2,'A')));
+        assertTrue(board.getShips().get(1).isAtLocation(new Square(3,'A')));
+
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'F')));
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'G')));
+        assertTrue(board.getShips().get(2).isAtLocation(new Square(9,'H')));
+
+        assertTrue(board.getShips().get(3).isAtLocation(new Square(5,'C')));
+        assertTrue(board.getShips().get(3).isAtLocation(new Square(6,'C')));
+        assertTrue(board.getShips().get(3).isAtLocation(new Square(7,'C')));
+        assertTrue(board.getShips().get(3).isAtLocation(new Square(8,'C')));
+        assertTrue(board.getShips().get(3).isAtLocation(new Square(6,'B')));
+    }
+
+    @Test
     public void testMoveOverlapNorthBoundry(){
         board.placeShip(new Ship("BATTLESHIP"), 1, 'D', false,false);
         board.placeShip(new Ship("MINESWEEPER"), 2, 'D', false,false);
