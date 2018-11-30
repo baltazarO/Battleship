@@ -9,7 +9,7 @@ var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
-document.getElementById("laser_button").addEventListener("click", function(){(isLaser = !isLaser)});
+//document.getElementById("laser_button").addEventListener("click", function(){(isLaser = !isLaser)});
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -167,6 +167,12 @@ function cellClick() {
 
 	//if (isLaser) {
 	    //if there is a submarine submerged, count the hit
+//	    sendXhr("POST", "/attack", {game: game, x: row, y: col}, function(data) {
+//
+//        			redrawGrid();
+//        		})
+// if square == ship or sub, mark a hit and if laser hits CQ, also count a hit.
+// else return a miss
 	    //also if there is a ship, count the hit.
 	    //if not, return a miss.
 	    //send information to sendXhr?
