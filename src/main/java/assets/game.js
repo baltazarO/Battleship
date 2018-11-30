@@ -9,7 +9,7 @@ var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
-//document.getElementById("laser_button").addEventListener("click", function(){(isLaser = !isLaser)});
+document.getElementById("laser_button").addEventListener("click", function(){(isLaser = !isLaser)});
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
