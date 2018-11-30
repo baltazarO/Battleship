@@ -9,7 +9,6 @@ var captIsLeft = false;
 var rotation = 1;
 document.getElementById("reset_button").addEventListener("click", function(){resetPage("Reload the game?")});
 document.getElementById("help").addEventListener("click", help);
-//document.getElementById("laser_button").addEventListener("click", function(){(isLaser = !isLaser)});
 document.getElementById("is_vertical").addEventListener("click",incrementRotation);
 Array.from(document.getElementsByClassName("increaseSize")).forEach((butt) => butt.addEventListener("click", resize));
 Array.from(document.getElementsByClassName("decreaseSize")).forEach((butt) => butt.addEventListener("click", resize));
@@ -164,14 +163,6 @@ function registerCellListener(f) {
 function cellClick() {
 	let row = this.parentNode.rowIndex + 1;
 	let col = String.fromCharCode(this.cellIndex + 65);
-
-	//if (isLaser) {
-	    //if there is a submarine submerged, count the hit
-	    //also if there is a ship, count the hit.
-	    //if not, return a miss.
-	    //send information to sendXhr?
-
-//	}
 
 	if (isSetup) {
 		sendXhr("POST", "/place", {game: game, shipType: shipType, x: row, y: col, isVertical: vertical, captIsLeft: captIsLeft}, function(data) {
