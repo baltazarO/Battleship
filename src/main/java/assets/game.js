@@ -170,7 +170,7 @@ function cellClick() {
 			sound("place.mp3");
 			doOutputResult(document.getElementById("playerName").value + " placed " + shipType);
 			placedShips++;
-			if (placedShips == 3) {
+			if (placedShips == 4) {
 				isSetup = false;
 				registerCellListener((e) => {});
 			}
@@ -207,6 +207,7 @@ function place(size) {
 	return function() {
 		let row = this.parentNode.rowIndex;
 		let col = this.cellIndex;
+		//make an assign placed for sub?
         assignPlaced(size, row, col);
 	}
 }
@@ -215,23 +216,53 @@ function place(size) {
 function assignPlaced(size, row, col){
 		vertical = document.getElementById("is_vertical").checked;
 		let table = document.getElementById("player");
-		for (let i=0; i<size; i++) {
-			let cell;
-			if(vertical) {
-				let tableRow = table.rows[row+i];
-				if (tableRow === undefined) {
+		if(size < 5){
+		    for (let i=0; i<size; i++) {
+			    let cell;
+			    if(vertical) {
+				    let tableRow = table.rows[row+i];
+				    if (tableRow === undefined) {
 					// ship is over the edge; let the back end deal with it
-					break;
-				}
-				cell = tableRow.cells[col];
-			} else {
-				cell = table.rows[row].cells[col+i];
-			}
-			if (cell === undefined) {
-				// ship is over the edge; let the back end deal with it
-				break;
-			}
-			cell.classList.toggle("placed");
+					    break;
+				    }
+				    cell = tableRow.cells[col];
+			    } else {
+				    cell = table.rows[row].cells[col+i];
+			    }
+			    if (cell === undefined) {
+				    // ship is over the edge; let the back end deal with it
+				    break;
+			    }
+			    cell.classList.toggle("placed");
+		    }
+		}else{
+            //get the top of submarine
+            let top_cell;
+            if(vertical){
+                let tableRow = table.rows[row+1];
+                top_cell = tableRow.cells[col-1];
+            } else{
+                top_cell = table.rows[row-1].cells[col+2];
+            }
+            top_cell.classList.toggle("placed");
+            for (let i=0; i<size-1; i++) {
+           	    let cell;
+           		if(vertical) {
+           		    let tableRow = table.rows[row+i];
+           			    if (tableRow === undefined) {
+           			    // ship is over the edge; let the back end deal with it
+          			        break;
+          		        }
+          		    cell = tableRow.cells[col];
+          		} else {
+     			    cell = table.rows[row].cells[col+i];
+        	    }
+           	    if (cell === undefined) {
+           	        // ship is over the edge; let the back end deal with it
+           	        break;
+           	    }
+           		cell.classList.toggle("placed");
+            }
 		}
 		assignCQ(size, row, col);
 }
@@ -269,6 +300,7 @@ function initGame() {
 	initShip("minesweeper", 2);
 	initShip("destroyer", 3);
 	initShip("battleship", 4);
+	initShip("submarine", 5);
 	sendXhr("GET", "/game", {}, function(data) {
 		game = data;
 	});
